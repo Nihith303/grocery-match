@@ -7,25 +7,50 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">CurryCart</h3>
+            <h3 className="text-lg font-semibold mb-4">Grocery Match</h3>
             <p className="text-gray-600">
-              Your one-stop shop for all ingredients to make delicious dishes from around the world.
+              Your one-stop shop for all ingredients to make delicious dishes
+              from around the world.
             </p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-gray-900">Home</Link>
+                <Link to="/" className="text-gray-600 hover:text-gray-900">
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to="/favorites" className="text-gray-600 hover:text-gray-900">Favorites</Link>
+                <Link to="/cart" className="text-gray-600 hover:text-gray-900">
+                  Cart
+                </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-gray-600 hover:text-gray-900">Cart</Link>
+                <Link
+                  to="/profile"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Profile
+                </Link>
               </li>
               <li>
-                <Link to="/profile" className="text-gray-600 hover:text-gray-900">Profile</Link>
+                <Link to="/blog" className="text-gray-600 hover:text-gray-900">
+                  Blogs
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="text-gray-600 hover:text-gray-900">
+                  FAQ's
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Contact
+                </Link>
               </li>
             </ul>
           </div>
@@ -33,16 +58,33 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Policies</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
+                <Link
+                  to="/privacy"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-gray-600 hover:text-gray-900">Terms of Service</Link>
+                <Link to="/terms" className="text-gray-600 hover:text-gray-900">
+                  Terms of Service
+                </Link>
               </li>
               <li>
-                <Link to="/shipping" className="text-gray-600 hover:text-gray-900">Shipping Policy</Link>
+                <Link
+                  to="/shipping"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Shipping Policy
+                </Link>
               </li>
               <li>
-                <Link to="/refund" className="text-gray-600 hover:text-gray-900">Refund Policy</Link>
+                <Link
+                  to="/refund"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Refund Policy
+                </Link>
               </li>
             </ul>
           </div>
