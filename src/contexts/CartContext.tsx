@@ -1,18 +1,24 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
-import { CartItem, Ingredient } from "@/types/database.types";
+import { CartItem, Ingredient, Dish } from "@/types/database.types";
 import { toast } from "@/hooks/use-toast";
 
 interface CartContextType {
   cartItems: CartItem[];
+  cartDishes: {
+    dish: Dish;
+    people: number;
+    ingredients: CartItem[];
+  }[];
   loading: boolean;
-  addToCart: (ingredientId: string, quantity: number) => Promise<void>;
+  addToCart: (ingredientId: string, quantity: number, dishId?: string) => Promise<void>;
   removeFromCart: (ingredientId: string) => Promise<void>;
-  updateQuantity: (ingredientId: string, quantity: number) => Promise<void>;
+  updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
   addDishToCart: (dishId: string) => Promise<void>;
+  removeDishFromCart: (dishId: string) => Promise<void>;
+  updatePeopleCount: (dishId: string, count: number) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -20,11 +26,52 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartDishes, setCartDishes] = useState<{
+    dish: Dish;
+    people: number;
+    ingredients: CartItem[];
+  }[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const organizeCartItems = async (items: CartItem[]) => {
+    // Items without dish_id
+    const standaloneItems = items.filter(item => !item.dish_id);
+    
+    // Group items by dish_id
+    const dishGroups = items.filter(item => item.dish_id).reduce((acc, item) => {
+      if (!acc[item.dish_id!]) {
+        acc[item.dish_id!] = [];
+      }
+      acc[item.dish_id!].push(item);
+      return acc;
+    }, {} as Record<string, CartItem[]>);
+    
+    // Fetch dish information
+    const dishPromises = Object.keys(dishGroups).map(async (dishId) => {
+      const { data, error } = await supabase
+        .from('dishes')
+        .select('*')
+        .eq('id', dishId)
+        .single();
+        
+      if (error || !data) return null;
+      
+      return {
+        dish: data as Dish,
+        people: dishGroups[dishId][0].people || 1,
+        ingredients: dishGroups[dishId]
+      };
+    });
+    
+    const dishesWithIngredients = (await Promise.all(dishPromises)).filter(Boolean);
+    setCartDishes(dishesWithIngredients as any);
+    setCartItems(standaloneItems);
+  };
 
   const fetchCartItems = async () => {
     if (!user) {
       setCartItems([]);
+      setCartDishes([]);
       setLoading(false);
       return;
     }
@@ -40,7 +87,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('user_id', user.id);
         
       if (error) throw error;
-      setCartItems(data || []);
+      
+      await organizeCartItems(data || []);
     } catch (error: any) {
       console.error('Error fetching cart items:', error);
       toast({
@@ -57,17 +105,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchCartItems();
   }, [user]);
 
-  const addToCart = async (ingredientId: string, quantity: number) => {
+  const addToCart = async (ingredientId: string, quantity: number, dishId?: string) => {
     if (!user) return;
     
     try {
       // Check if item already exists in cart
-      const existingItem = cartItems.find(item => item.ingredient_id === ingredientId);
+      const existingItemIndex = cartItems.findIndex(item => 
+        item.ingredient_id === ingredientId && 
+        (dishId ? item.dish_id === dishId : !item.dish_id)
+      );
       
-      if (existingItem) {
+      if (existingItemIndex >= 0) {
         // Update quantity if already in cart
-        const newQuantity = existingItem.quantity + quantity;
-        await updateQuantity(ingredientId, newQuantity);
+        const newQuantity = cartItems[existingItemIndex].quantity + quantity;
+        await updateQuantity(cartItems[existingItemIndex].id, newQuantity);
       } else {
         // Add new item to cart
         const { error } = await supabase
@@ -75,7 +126,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .insert({
             user_id: user.id,
             ingredient_id: ingredientId,
-            quantity
+            quantity,
+            dish_id: dishId,
+            people: dishId ? 1 : null
           });
           
         if (error) throw error;
@@ -107,7 +160,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
       if (error) throw error;
       
-      setCartItems(cartItems.filter(item => item.ingredient_id !== ingredientId));
+      await fetchCartItems();
       toast({
         title: "Removed from cart",
         description: "Item has been removed from your cart.",
@@ -122,28 +175,26 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateQuantity = async (ingredientId: string, quantity: number) => {
+  const updateQuantity = async (itemId: string, quantity: number) => {
     if (!user) return;
     
     try {
       if (quantity <= 0) {
-        await removeFromCart(ingredientId);
+        const itemToRemove = [...cartItems, ...cartDishes.flatMap(d => d.ingredients)].find(i => i.id === itemId);
+        if (itemToRemove) {
+          await removeFromCart(itemToRemove.ingredient_id);
+        }
         return;
       }
       
       const { error } = await supabase
         .from('user_carts')
         .update({ quantity })
-        .eq('user_id', user.id)
-        .eq('ingredient_id', ingredientId);
+        .eq('id', itemId);
         
       if (error) throw error;
       
-      setCartItems(cartItems.map(item => 
-        item.ingredient_id === ingredientId 
-          ? { ...item, quantity } 
-          : item
-      ));
+      await fetchCartItems();
     } catch (error: any) {
       console.error('Error updating quantity:', error);
       toast({
@@ -166,6 +217,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
       
       setCartItems([]);
+      setCartDishes([]);
       toast({
         title: "Cart cleared",
         description: "All items have been removed from your cart.",
@@ -204,12 +256,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Add all ingredients to cart
-      const promises = dishIngredients.map(async (item) => {
-        await addToCart(item.ingredient_id, item.quantity);
+      // Add all ingredients to cart with dish_id
+      const cartPromises = dishIngredients.map(async (item) => {
+        const { error } = await supabase
+          .from('user_carts')
+          .insert({
+            user_id: user.id,
+            ingredient_id: item.ingredient_id,
+            quantity: item.quantity,
+            dish_id: dishId,
+            people: 1
+          });
+          
+        if (error) throw error;
       });
       
-      await Promise.all(promises);
+      await Promise.all(cartPromises);
+      await fetchCartItems();
       
       const { data: dishData } = await supabase
         .from('dishes')
@@ -219,7 +282,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       toast({
         title: "Added to cart",
-        description: `All ingredients for ${dishData?.name || 'the dish'} have been added to your cart.`,
+        description: `${dishData?.name || 'The dish'} has been added to your cart.`,
       });
     } catch (error: any) {
       console.error('Error adding dish to cart:', error);
@@ -231,16 +294,69 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const removeDishFromCart = async (dishId: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('user_carts')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('dish_id', dishId);
+        
+      if (error) throw error;
+      
+      await fetchCartItems();
+      toast({
+        title: "Removed from cart",
+        description: "Dish has been removed from your cart.",
+      });
+    } catch (error: any) {
+      console.error('Error removing dish from cart:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to remove dish",
+        description: error.message,
+      });
+    }
+  };
+
+  const updatePeopleCount = async (dishId: string, count: number) => {
+    if (!user || count < 1) return;
+    
+    try {
+      const { error } = await supabase
+        .from('user_carts')
+        .update({ people: count })
+        .eq('user_id', user.id)
+        .eq('dish_id', dishId);
+        
+      if (error) throw error;
+      
+      await fetchCartItems();
+    } catch (error: any) {
+      console.error('Error updating people count:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to update people count",
+        description: error.message,
+      });
+    }
+  };
+
   return (
     <CartContext.Provider 
       value={{ 
         cartItems, 
+        cartDishes,
         loading, 
         addToCart, 
         removeFromCart, 
         updateQuantity, 
         clearCart,
-        addDishToCart
+        addDishToCart,
+        removeDishFromCart,
+        updatePeopleCount
       }}
     >
       {children}

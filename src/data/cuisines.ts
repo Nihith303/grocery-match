@@ -5,6 +5,14 @@ export interface Cuisine {
   description: string;
 }
 
+export interface Dish {
+  id: string;
+  name: string;
+  description: string;
+  youtubeVideoId?: string;
+  recipeUrl?: string;
+}
+
 export const cuisines: Cuisine[] = [
   {
     id: "italian",
@@ -89,228 +97,308 @@ export const cuisines: Cuisine[] = [
 ];
 
 export const dishes = {
-  italian: [
+  "italian": [
     {
-      id: "00000001-0000-0000-0000-000000000001",
-      name: "Margherita Pizza",
-      description: "Classic pizza with tomato sauce, mozzarella, and basil",
+      "id": "00000001-0000-0000-0000-000000000001",
+      "name": "Margherita Pizza",
+      "description": "Classic pizza with tomato sauce, mozzarella, and basil",
+      "youtubeVideoId": "1-SJGQ2HLp8",
+      "recipeUrl": "https://www.vegrecipesofindia.com/margherita-pizza-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000002",
-      name: "Spaghetti Carbonara",
-      description: "Pasta with eggs, cheese, pancetta, and pepper",
+      "id": "00000001-0000-0000-0000-000000000002",
+      "name": "Spaghetti Carbonara",
+      "description": "Pasta with eggs, cheese, pancetta, and pepper",
+      "youtubeVideoId": "qoHnwOHLiMk",
+      "recipeUrl": "https://www.allrecipes.com/recipe/245775/spaghetti-alla-carbonara-traditional-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000003",
-      name: "Lasagna",
-      description: "Layered pasta with meat sauce, béchamel, and cheese",
+      "id": "00000001-0000-0000-0000-000000000003",
+      "name": "Lasagna",
+      "description": "Layered pasta with meat sauce, béchamel, and cheese",
+      "youtubeVideoId": "FzapYx5d8hM",
+      "recipeUrl": "https://www.allrecipes.com/recipe/23600/worlds-best-lasagna/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000004",
-      name: "Risotto alla Milanese",
-      description: "Creamy rice dish with saffron and parmesan",
+      "id": "00000001-0000-0000-0000-000000000004",
+      "name": "Risotto alla Milanese",
+      "description": "Creamy rice dish with saffron and parmesan",
+      "youtubeVideoId": "R2UEWpI0D3Y",
+      "recipeUrl": "https://www.bbcgoodfood.com/recipes/risotto-milanese"
     },
     {
-      id: "00000001-0000-0000-0000-000000000005",
-      name: "Gnocchi",
-      description: "Soft dough dumplings made from potatoes",
+      "id": "00000001-0000-0000-0000-000000000005",
+      "name": "Gnocchi",
+      "description": "Soft dough dumplings made from potatoes",
+      "youtubeVideoId": "0aQ0a9k4mWU",
+      "recipeUrl": "https://www.allrecipes.com/recipe/18465/gnocchi-i/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000006",
-      name: "Tiramisu",
-      description: "Coffee-flavored dessert with mascarpone and cocoa",
+      "id": "00000001-0000-0000-0000-000000000006",
+      "name": "Tiramisu",
+      "description": "Coffee-flavored dessert with mascarpone and cocoa",
+      "youtubeVideoId": "xU2j3zi3TbQ",
+      "recipeUrl": "https://www.simplyrecipes.com/recipes/tiramisu/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000007",
-      name: "Focaccia",
-      description: "Oven-baked flatbread with olive oil and herbs",
+      "id": "00000001-0000-0000-0000-000000000007",
+      "name": "Focaccia",
+      "description": "Oven-baked flatbread with olive oil and herbs",
+      "youtubeVideoId": "Z6RfT2-e5IM",
+      "recipeUrl": "https://www.kingarthurbaking.com/recipes/easy-focaccia-recipe"
     },
     {
-      id: "00000001-0000-0000-0000-000000000008",
-      name: "Caprese Salad",
-      description: "Simple salad with tomatoes, mozzarella, and basil",
+      "id": "00000001-0000-0000-0000-000000000008",
+      "name": "Caprese Salad",
+      "description": "Simple salad with tomatoes, mozzarella, and basil",
+      "youtubeVideoId": "c1JxSlXxpyk",
+      "recipeUrl": "https://www.foodnetwork.com/recipes/caprese-salad-recipe-1911942"
     },
     {
-      id: "00000001-0000-0000-0000-000000000009",
-      name: "Ossobuco",
-      description: "Braised veal shanks with vegetables and broth",
+      "id": "00000001-0000-0000-0000-000000000009",
+      "name": "Ossobuco",
+      "description": "Braised veal shanks with vegetables and broth",
+      "youtubeVideoId": "Gk0t7kqjX4s",
+      "recipeUrl": "https://www.saveur.com/osso-buco-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000010",
-      name: "Panettone",
-      description: "Sweet bread loaf enjoyed during holidays",
-    },
+      "id": "00000001-0000-0000-0000-000000000010",
+      "name": "Panettone",
+      "description": "Sweet bread loaf enjoyed during holidays",
+      "youtubeVideoId": "sQ47X73kjpU",
+      "recipeUrl": "https://www.epicurious.com/recipes/food/views/panettone"
+    }
   ],
-  japanese: [
+  "japanese": [
     {
-      id: "00000001-0000-0000-0000-000000000011",
-      name: "Sushi",
-      description: "Vinegared rice with various toppings or fillings",
+      "id": "00000001-0000-0000-0000-000000000011",
+      "name": "Sushi",
+      "description": "Vinegared rice with various toppings or fillings",
+      "youtubeVideoId": "A1UWF4y8TqM",
+      "recipeUrl": "https://www.justonecookbook.com/sushi-rice/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000012",
-      name: "Sashimi",
-      description: "Thinly sliced raw fish or meat",
+      "id": "00000001-0000-0000-0000-000000000012",
+      "name": "Sashimi",
+      "description": "Thinly sliced raw fish or meat",
+      "youtubeVideoId": "vLqKp_QtggE",
+      "recipeUrl": "https://www.thespruceeats.com/how-to-make-sashimi-2031480"
     },
     {
-      id: "00000001-0000-0000-0000-000000000013",
-      name: "Ramen",
-      description: "Noodle soup with meat, vegetables, and broth",
+      "id": "00000001-0000-0000-0000-000000000013",
+      "name": "Ramen",
+      "description": "Noodle soup with meat, vegetables, and broth",
+      "youtubeVideoId": "lMiyS4g9rhk",
+      "recipeUrl": "https://www.seriouseats.com/tonkotsu-ramen-from-scratch-recipe"
     },
     {
-      id: "00000001-0000-0000-0000-000000000014",
-      name: "Tempura",
-      description: "Battered and deep-fried seafood or vegetables",
+      "id": "00000001-0000-0000-0000-000000000014",
+      "name": "Tempura",
+      "description": "Battered and deep-fried seafood or vegetables",
+      "youtubeVideoId": "BQfZ8RHiSio",
+      "recipeUrl": "https://www.justonecookbook.com/tempura/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000015",
-      name: "Okonomiyaki",
-      description: "Savory pancake with various ingredients",
+      "id": "00000001-0000-0000-0000-000000000015",
+      "name": "Okonomiyaki",
+      "description": "Savory pancake with various ingredients",
+      "youtubeVideoId": "m_NSDngC8lY",
+      "recipeUrl": "https://www.justonecookbook.com/okonomiyaki/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000016",
-      name: "Takoyaki",
-      description: "Ball-shaped snack filled with octopus",
+      "id": "00000001-0000-0000-0000-000000000016",
+      "name": "Takoyaki",
+      "description": "Ball-shaped snack filled with octopus",
+      "youtubeVideoId": "V2h-7VpD0v0",
+      "recipeUrl": "https://www.justonecookbook.com/takoyaki/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000017",
-      name: "Udon",
-      description: "Thick wheat flour noodles in broth",
+      "id": "00000001-0000-0000-0000-000000000017",
+      "name": "Udon",
+      "description": "Thick wheat flour noodles in broth",
+      "youtubeVideoId": "dGjK8uH54T4",
+      "recipeUrl": "https://www.justonecookbook.com/how-to-make-udon/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000018",
-      name: "Miso Soup",
-      description: "Traditional soup with dashi stock and miso paste",
+      "id": "00000001-0000-0000-0000-000000000018",
+      "name": "Miso Soup",
+      "description": "Traditional soup with dashi stock and miso paste",
+      "youtubeVideoId": "y9q5xAvU-6I",
+      "recipeUrl": "https://www.justonecookbook.com/miso-soup/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000019",
-      name: "Tonkatsu",
-      description: "Breaded, deep-fried pork cutlet",
+      "id": "00000001-0000-0000-0000-000000000019",
+      "name": "Tonkatsu",
+      "description": "Breaded, deep-fried pork cutlet",
+      "youtubeVideoId": "gZ5kZR9Fy8s",
+      "recipeUrl": "https://www.justonecookbook.com/tonkatsu/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000020",
-      name: "Mochi",
-      description: "Sweet rice cake made of mochigome rice",
-    },
+      "id": "00000001-0000-0000-0000-000000000020",
+      "name": "Mochi",
+      "description": "Sweet rice cake made of mochigome rice",
+      "youtubeVideoId": "nHiYlGjO83k",
+      "recipeUrl": "https://www.justonecookbook.com/how-to-make-mochi/"
+    }
   ],
-  mexican: [
+  "mexican": [
     {
-      id: "00000001-0000-0000-0000-000000000021",
-      name: "Tacos al Pastor",
-      description: "Marinated pork tacos with pineapple",
+      "id": "00000001-0000-0000-0000-000000000021",
+      "name": "Tacos al Pastor",
+      "description": "Marinated pork tacos with pineapple",
+      "youtubeVideoId": "v2JtHj8armw",
+      "recipeUrl": "https://www.seriouseats.com/tacos-al-pastor"
     },
     {
-      id: "00000001-0000-0000-0000-000000000022",
-      name: "Enchiladas",
-      description:
-        "Corn tortillas rolled around fillings and covered with sauce",
+      "id": "00000001-0000-0000-0000-000000000022",
+      "name": "Enchiladas",
+      "description": "Corn tortillas rolled around fillings and covered with sauce",
+      "youtubeVideoId": "nS7lUv5T3ZI",
+      "recipeUrl": "https://www.mexicanplease.com/enchiladas-salsa-roja/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000023",
-      name: "Chiles Rellenos",
-      description: "Stuffed and fried poblano peppers",
+      "id": "00000001-0000-0000-0000-000000000023",
+      "name": "Chiles Rellenos",
+      "description": "Stuffed and fried poblano peppers",
+      "youtubeVideoId": "3v1zHj_5nwE",
+      "recipeUrl": "https://www.mexicoinmykitchen.com/chiles-rellenos/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000024",
-      name: "Guacamole",
-      description: "Avocado-based dip with lime and herbs",
+      "id": "00000001-0000-0000-0000-000000000024",
+      "name": "Guacamole",
+      "description": "Avocado-based dip with lime and herbs",
+      "youtubeVideoId": "fmB1We4Z2s4",
+      "recipeUrl": "https://www.simplyrecipes.com/recipes/perfect_guacamole/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000025",
-      name: "Quesadillas",
-      description: "Tortillas filled with cheese and other ingredients",
+      "id": "00000001-0000-0000-0000-000000000025",
+      "name": "Quesadillas",
+      "description": "Tortillas filled with cheese and other ingredients",
+      "youtubeVideoId": "b9iP5kYJpCI",
+      "recipeUrl": "https://www.inspiredtaste.net/24749/simple-quesadilla-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000026",
-      name: "Tamales",
-      description: "Corn-based dough filled with meats or fruits",
+      "id": "00000001-0000-0000-0000-000000000026",
+      "name": "Tamales",
+      "description": "Corn-based dough filled with meats or fruits",
+      "youtubeVideoId": "X_7qUeN3Yh4",
+      "recipeUrl": "https://www.mexicanplease.com/tamales-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000027",
-      name: "Pozole",
-      description: "Traditional soup with hominy and meat",
+      "id": "00000001-0000-0000-0000-000000000027",
+      "name": "Pozole",
+      "description": "Traditional soup with hominy and meat",
+      "youtubeVideoId": "sCQOxs1bqkA",
+      "recipeUrl": "https://www.mexicoinmykitchen.com/pozole-rojo/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000028",
-      name: "Mole Poblano",
-      description: "Rich sauce with chocolate and chili peppers",
+      "id": "00000001-0000-0000-0000-000000000028",
+      "name": "Mole Poblano",
+      "description": "Rich sauce with chocolate and chili peppers",
+      "youtubeVideoId": "oJTPpZxHD3k",
+      "recipeUrl": "https://www.mexicoinmykitchen.com/mole-poblano-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000029",
-      name: "Sopa de Lima",
-      description: "Lime soup with chicken and tortilla strips",
+      "id": "00000001-0000-0000-0000-000000000029",
+      "name": "Sopa de Lima",
+      "description": "Lime soup with chicken and tortilla strips",
+      "youtubeVideoId": "8W9xwX8Rw1A",
+      "recipeUrl": "https://www.mexicanplease.com/sopa-de-lima/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000030",
-      name: "Flan Mexicano",
-      description: "Creamy caramel custard dessert",
-    },
+      "id": "00000001-0000-0000-0000-000000000030",
+      "name": "Flan Mexicano",
+      "description": "Creamy caramel custard dessert",
+      "youtubeVideoId": "7jXHp5Q7eU4",
+      "recipeUrl": "https://www.mexicoinmykitchen.com/mexican-flan-recipe/"
+    }
   ],
-  indian: [
+  "indian": [
     {
-      id: "00000001-0000-0000-0000-000000000031",
-      name: "Chicken Biryani",
-      description:
-        "Aromatic rice dish cooked with spices and marinated chicken",
+      "id": "00000001-0000-0000-0000-000000000031",
+      "name": "Chicken Biryani",
+      "description": "Aromatic rice dish cooked with spices and marinated chicken",
+      "youtubeVideoId": "95BCU1n268w",
+      "recipeUrl": "https://www.vegrecipesofindia.com/chicken-biryani-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000032",
-      name: "Butter Chicken",
-      description: "Creamy tomato-based curry with tender chicken pieces",
+      "id": "00000001-0000-0000-0000-000000000032",
+      "name": "Butter Chicken",
+      "description": "Creamy tomato-based curry with tender chicken pieces",
+      "youtubeVideoId": "a03U45jFxOI",
+      "recipeUrl": "https://www.vegrecipesofindia.com/butter-chicken/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000033",
-      name: "Chicken Curry",
-      description:
-        "Traditional curry with chicken, spices, and a flavorful gravy",
+      "id": "00000001-0000-0000-0000-000000000033",
+      "name": "Chicken Curry",
+      "description": "Traditional curry with chicken, spices, and a flavorful gravy",
+      "youtubeVideoId": "gEo25B8V1wM",
+      "recipeUrl": "https://www.vegrecipesofindia.com/chicken-curry/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000034",
-      name: "Paneer Butter Masala",
-      description: "Rich and creamy curry made with paneer and butter",
+      "id": "00000001-0000-0000-0000-000000000034",
+      "name": "Paneer Butter Masala",
+      "description": "Rich and creamy curry made with paneer and butter",
+      "youtubeVideoId": "v8QePabmh34",
+      "recipeUrl": "https://www.vegrecipesofindia.com/paneer-butter-masala/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000035",
-      name: "Rogan Josh",
-      description: "Spicy lamb curry from Kashmir with a red chili base",
+      "id": "00000001-0000-0000-0000-000000000035",
+      "name": "Rogan Josh",
+      "description": "Spicy lamb curry from Kashmir with a red chili base",
+      "youtubeVideoId": "l7QZwgZv5tY",
+      "recipeUrl": "https://www.vegrecipesofindia.com/rogan-josh/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000036",
-      name: "Chole Bhature",
-      description: "Spiced chickpeas served with deep-fried bread",
+      "id": "00000001-0000-0000-0000-000000000036",
+      "name": "Chole Bhature",
+      "description": "Spiced chickpeas served with deep-fried bread",
+      "youtubeVideoId": "z6XyT6Zf3oY",
+      "recipeUrl": "https://www.vegrecipesofindia.com/chole-bhature-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000037",
-      name: "Palak Paneer",
-      description: "Cottage cheese cooked in a spinach-based gravy",
+      "id": "00000001-0000-0000-0000-000000000037",
+      "name": "Palak Paneer",
+      "description": "Cottage cheese cooked in a spinach-based gravy",
+      "youtubeVideoId": "wF0w9QvjD5g",
+      "recipeUrl": "https://www.vegrecipesofindia.com/palak-paneer/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000038",
-      name: "Tandoori Chicken",
-      description:
-        "Chicken marinated in yogurt and spices, cooked in a tandoor",
+      "id": "00000001-0000-0000-0000-000000000038",
+      "name": "Tandoori Chicken",
+      "description": "Chicken marinated in yogurt and spices, cooked in a tandoor",
+      "youtubeVideoId": "XeYJj0X8__M",
+      "recipeUrl": "https://www.vegrecipesofindia.com/tandoori-chicken/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000039",
-      name: "Gulab Jamun",
-      description: "Deep-fried milk solids soaked in sugar syrup",
+      "id": "00000001-0000-0000-0000-000000000039",
+      "name": "Gulab Jamun",
+      "description": "Deep-fried milk solids soaked in sugar syrup",
+      "youtubeVideoId": "WxXQ9IpeLQ0",
+      "recipeUrl": "https://www.vegrecipesofindia.com/gulab-jamun-recipe/"
     },
     {
-      id: "00000001-0000-0000-0000-000000000040",
-      name: "Jalebi",
-      description: "Deep-fried sweet soaked in saffron-flavored sugar syrup",
-    },
+      "id": "00000001-0000-0000-0000-000000000040",
+      "name": "Jalebi",
+      "description": "Deep-fried sweet soaked in saffron-flavored sugar syrup",
+      "youtubeVideoId": "C7NpZCm0P7k",
+      "recipeUrl": "https://www.vegrecipesofindia.com/jalebi-recipe/"
+    }
   ],
-  french: [
+  "french": [
     {
-      id: "00000001-0000-0000-0000-000000000041",
-      name: "Croissants",
-      description: "Buttery, flaky pastry perfect for breakfast",
+      "id": "00000001-0000-0000-0000-000000000041",
+      "name": "Croissants",
+      "description": "Buttery, flaky pastry perfect for breakfast",
+      "youtubeVideoId": "kmfuUQczgwo",
+      "recipeUrl": "https://www.epicurious.com/recipes/food/views/homemade-french-croissants"
     },
     {
-      id: "00000001-0000-0000-0000-000000000042",
-      name: "Baguette",
-      description: "Long, thin loaf of French bread with a crispy crust",
+      "id": "00000001-0000-0000-0000-000000000042",
+      "name": "Baguette",
+      "description": "Long, thin loaf of French bread with a crispy crust",
+      "youtubeVideoId": "Q_7ghV8ZGHk",
+      "recipeUrl": "https://www.kingarthurbaking.com/recipes/classic-baguettes-recipe"
     },
     {
       id: "00000001-0000-0000-0000-000000000043",

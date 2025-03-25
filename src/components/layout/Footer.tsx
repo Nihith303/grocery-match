@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -37,6 +38,11 @@ export function Footer() {
               <li>
                 <Link to="/blog" className="text-gray-600 hover:text-gray-900">
                   Blogs
+                </Link>
+              </li>
+              <li>
+                <Link to="/make-my-dish" className="text-gray-600 hover:text-gray-900">
+                  Make My Dish
                 </Link>
               </li>
               <li>

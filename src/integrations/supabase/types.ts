@@ -147,29 +147,63 @@ export type Database = {
         }
         Relationships: []
       }
+      recipe_generation_usage: {
+        Row: {
+          generated_at: string
+          id: string
+          usage_date: string
+          user_id: string
+        }
+        Insert: {
+          generated_at?: string
+          id?: string
+          usage_date?: string
+          user_id: string
+        }
+        Update: {
+          generated_at?: string
+          id?: string
+          usage_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_carts: {
         Row: {
           added_at: string
+          dish_id: string | null
           id: string
           ingredient_id: string
+          people: number | null
           quantity: number
           user_id: string
         }
         Insert: {
           added_at?: string
+          dish_id?: string | null
           id?: string
           ingredient_id: string
+          people?: number | null
           quantity: number
           user_id: string
         }
         Update: {
           added_at?: string
+          dish_id?: string | null
           id?: string
           ingredient_id?: string
+          people?: number | null
           quantity?: number
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_carts_dish_id_fkey"
+            columns: ["dish_id"]
+            isOneToOne: false
+            referencedRelation: "dishes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_carts_ingredient_id_fkey"
             columns: ["ingredient_id"]

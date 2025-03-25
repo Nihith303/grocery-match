@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -11,6 +12,9 @@ import {
   BookOpen,
   MessageSquare,
   HelpCircle,
+  Home,
+  Compass,
+  Utensils,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -67,13 +71,14 @@ export function Navbar() {
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
+                      <Home className="h-4 w-4 mr-2" />
                       Home
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Explore</NavigationMenuTrigger>
+                  <NavigationMenuTrigger><Compass className="h-4 w-4 mr-2" />Explore</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       <li className="row-span-3">
@@ -92,6 +97,20 @@ export function Navbar() {
                             </p>
                           </a>
                         </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <Link
+                          to="/make-my-dish"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none flex items-center">
+                            <div className="h-4 w-4 mr-2">🧪</div>
+                            Make My Dish
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Generate recipes from ingredients you have
+                          </p>
+                        </Link>
                       </li>
                       <li>
                         <Link
@@ -131,11 +150,23 @@ export function Navbar() {
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
                       >
+                        <Heart className="h-4 w-4 mr-2" />
                         Favorites
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
                 )}
+                
+                <NavigationMenuItem>
+                  <Link to="/make-my-dish">
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      <Utensils className="h-4 w-4 mr-2" />
+                      Make My Dish
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -146,8 +177,9 @@ export function Navbar() {
               <>
                 <Link
                   to="/profile"
-                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary"
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary flex items-center"
                 >
+                  <User className="h-4 w-4 mr-2" />
                   Profile
                 </Link>
                 <Button
@@ -217,6 +249,16 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
+            </Link>
+            <Link
+              to="/make-my-dish"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="flex items-center">
+                <span className="mr-2">🧪</span>
+                Make My Dish
+              </div>
             </Link>
             <Link
               to="/blog"

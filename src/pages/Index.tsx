@@ -1,7 +1,9 @@
+
 import { Layout } from "@/components/layout/Layout";
 import { CuisineCarousel } from "@/components/home/CuisineCarousel";
 import { CuisineCategories } from "@/components/home/CuisineCategories";
 import { SearchBar } from "@/components/home/SearchBar";
+import { RecipeGeneratorBanner } from "@/components/home/RecipeGeneratorBanner";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dish } from "@/types/database.types";
@@ -52,6 +54,8 @@ const Index = () => {
           </p>
           <SearchBar />
         </div>
+
+        <RecipeGeneratorBanner />
 
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

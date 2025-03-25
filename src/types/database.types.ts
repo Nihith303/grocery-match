@@ -35,6 +35,8 @@ export type CartItem = {
   ingredient_id: string;
   quantity: number;
   added_at: string;
+  dish_id?: string;
+  people?: number;
   ingredient?: Ingredient;
 };
 

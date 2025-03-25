@@ -23,6 +23,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
+import MakeMyDish from "./pages/MakeMyDish";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/shipping" element={<ShippingPolicy />} />
                 <Route path="/refund" element={<RefundPolicy />} />
+                <Route path="/make-my-dish" element={<MakeMyDish />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
