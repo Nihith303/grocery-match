@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,6 +52,12 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Food-specific colors */
+    --food-red: 0 100% 63%;
+    --food-orange: 35 100% 64%;
+    --food-green: 120 57% 67%;
+    --food-blue: 210 100% 20%;
   }
 
   .dark {
@@ -87,6 +96,12 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Food-specific colors - slightly adjusted for dark mode */
+    --food-red: 0 90% 67%;
+    --food-orange: 35 90% 67%;
+    --food-green: 120 50% 70%;
+    --food-blue: 210 80% 35%;
   }
 }
 
@@ -97,5 +112,140 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #556B2F;  /* Olive green for all headings */
+  }
+  
+  /* Add a touch of orange to specific headings */
+  h1 span, h2 span, h3 span, .accent-text {
+    color: #FF8C42;  /* Accent orange */
+  }
+  
+  /* Add a gradient effect for main page headings */
+  .main-heading {
+    background: linear-gradient(90deg, #556B2F, #FF8C42);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Card headings */
+  .card h1, .card h2, .card h3, 
+  .card-title, h2.text-2xl, h3.text-xl {
+    color: #556B2F; /* Olive green */
+  }
+  
+  /* Special treatment for dialog/modal titles */
+  .dialog-title, [data-radix-popper-content-wrapper] h2 {
+    color: #556B2F;
+  }
+}
+
+@layer components {
+  .food-item-card {
+    @apply relative overflow-hidden transition-all duration-300 rounded-lg shadow-md hover:shadow-lg;
+  }
+  
+  .food-item-card:hover {
+    @apply scale-[1.03];
+  }
+  
+  .food-item-card:hover .food-item-image {
+    @apply scale-110;
+  }
+  
+  .food-item-image {
+    @apply transition-transform duration-500;
+  }
+  
+  /* Steam animation */
+  .steam {
+    @apply absolute w-6 h-10 opacity-0 animate-steam;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  }
+  
+  @keyframes steam {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateY(-10px) scale(1.2);
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateY(-20px) scale(1.5);
+      opacity: 0;
+    }
+  }
+  
+  .animate-steam {
+    animation: steam 2s ease-out infinite;
+  }
+  
+  .steam:nth-child(1) {
+    animation-delay: 0.2s;
+  }
+  
+  .steam:nth-child(2) {
+    animation-delay: 0.8s;
+  }
+  
+  .steam:nth-child(3) {
+    animation-delay: 1.5s;
+  }
+}
+
+/* Slide animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.3s forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.3s forwards;
 }

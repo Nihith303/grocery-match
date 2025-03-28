@@ -40,7 +40,7 @@ export function CuisineCarousel() {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center hover:bg-opacity-30 transition-all">
-                    <h3 className="text-white text-xl font-bold">{cuisine.name}</h3>
+                    <h3 className="text-orange-400 text-3xl font-bold">{cuisine.name}</h3>
                   </div>
                 </CardContent>
               </Card>

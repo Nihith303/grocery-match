@@ -182,7 +182,7 @@ const CuisinePage = () => {
         </div>
 
         <h2 className="text-2xl font-bold mb-6">
-          Popular {cuisine.name} Dishes
+          Popular <span className="accent-text">{cuisine.name}</span> Dishes
         </h2>
 
         {cuisineDishes.length > 0 ? (
@@ -204,7 +204,7 @@ const CuisinePage = () => {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle>{dish.name} Ingredients</DialogTitle>
+                        <DialogTitle className="dialog-title">{dish.name} Ingredients</DialogTitle>
                         <DialogDescription>
                           Here are all the ingredients needed for this dish.
                         </DialogDescription>
@@ -331,7 +331,7 @@ const CuisinePage = () => {
       <Dialog open={!!activeVideoId} onOpenChange={(open) => !open && setActiveVideoId(null)}>
         <DialogContent className="sm:max-w-3xl max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle>Recipe Video</DialogTitle>
+            <DialogTitle className="dialog-title">Recipe Video</DialogTitle>
             <DialogDescription>
               Watch the full recipe demonstration
             </DialogDescription>

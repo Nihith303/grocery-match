@@ -1,4 +1,3 @@
-
 export type Dish = {
   id: string;
   name: string;
@@ -12,10 +11,17 @@ export type Dish = {
 export type Ingredient = {
   id: string;
   name: string;
-  category: string | null;
-  image_url: string | null;
-  unit: string | null;
-  created_at: string;
+  description?: string;
+  price?: number;
+  image_url?: string;
+  unit?: string;
+  category?: string;
+  is_vegan?: boolean;
+  is_vegetarian?: boolean;
+  is_gluten_free?: boolean;
+  is_dairy_free?: boolean;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type DishIngredient = {

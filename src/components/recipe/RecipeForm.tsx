@@ -276,7 +276,7 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
           id="difficulty"
           value={[difficulty]}
           min={0}
-          max={100}
+          max={66}
           step={33}
           onValueChange={(values) => setDifficulty(values[0])}
           disabled={isFormDisabled}
