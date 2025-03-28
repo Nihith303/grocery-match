@@ -24,7 +24,7 @@ This project uses Google Gemini API for generating recipes. Follow these steps t
 4. Add your Gemini API key to the `.env` file: `VITE_GEMINI_API_KEY=your_key_here`
 5. Restart your development server
 
-Note: The recipe generation feature is limited to 3 requests per user per day to prevent API abuse.
+Note: The recipe generation feature is limited to 1 requests per user per day to prevent API abuse.
 
 ## What technologies are used for this project?
 
