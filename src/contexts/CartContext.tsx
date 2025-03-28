@@ -19,6 +19,20 @@ interface CartContextType {
   addDishToCart: (dishId: string) => Promise<void>;
   removeDishFromCart: (dishId: string) => Promise<void>;
   updatePeopleCount: (dishId: string, count: number) => Promise<void>;
+  customizeIngredient: (
+    dishId: string, 
+    ingredientId: string, 
+    quantity: number
+  ) => Promise<void>;
+  removeIngredientFromDish: (
+    dishId: string,
+    ingredientId: string
+  ) => Promise<void>;
+  addIngredientToDish: (
+    dishId: string,
+    ingredientId: string,
+    quantity: number
+  ) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -34,10 +48,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   const organizeCartItems = async (items: CartItem[]) => {
-    // Items without dish_id
     const standaloneItems = items.filter(item => !item.dish_id);
-    
-    // Group items by dish_id
     const dishGroups = items.filter(item => item.dish_id).reduce((acc, item) => {
       if (!acc[item.dish_id!]) {
         acc[item.dish_id!] = [];
@@ -46,7 +57,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return acc;
     }, {} as Record<string, CartItem[]>);
     
-    // Fetch dish information
     const dishPromises = Object.keys(dishGroups).map(async (dishId) => {
       const { data, error } = await supabase
         .from('dishes')
@@ -109,18 +119,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     
     try {
-      // Check if item already exists in cart
       const existingItemIndex = cartItems.findIndex(item => 
         item.ingredient_id === ingredientId && 
         (dishId ? item.dish_id === dishId : !item.dish_id)
       );
       
       if (existingItemIndex >= 0) {
-        // Update quantity if already in cart
         const newQuantity = cartItems[existingItemIndex].quantity + quantity;
         await updateQuantity(cartItems[existingItemIndex].id, newQuantity);
       } else {
-        // Add new item to cart
         const { error } = await supabase
           .from('user_carts')
           .insert({
@@ -236,7 +243,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     
     try {
-      // Get all ingredients for the dish
       const { data: dishIngredients, error: ingredientsError } = await supabase
         .from('dish_ingredients')
         .select(`
@@ -256,7 +262,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Add all ingredients to cart with dish_id
       const cartPromises = dishIngredients.map(async (item) => {
         const { error } = await supabase
           .from('user_carts')
@@ -344,6 +349,85 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const customizeIngredient = async (dishId: string, ingredientId: string, quantity: number) => {
+    if (!user) return;
+    
+    try {
+      const dishItems = cartDishes.find(d => d.dish.id === dishId)?.ingredients || [];
+      const itemToUpdate = dishItems.find(item => item.ingredient_id === ingredientId);
+      
+      if (!itemToUpdate) {
+        throw new Error("Ingredient not found in dish");
+      }
+      
+      await updateQuantity(itemToUpdate.id, quantity);
+    } catch (error: any) {
+      console.error('Error customizing ingredient:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to customize ingredient",
+        description: error.message,
+      });
+      throw error;
+    }
+  };
+
+  const removeIngredientFromDish = async (dishId: string, ingredientId: string) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('user_carts')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('dish_id', dishId)
+        .eq('ingredient_id', ingredientId);
+        
+      if (error) throw error;
+      
+      await fetchCartItems();
+    } catch (error: any) {
+      console.error('Error removing ingredient from dish:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to remove ingredient",
+        description: error.message,
+      });
+      throw error;
+    }
+  };
+
+  const addIngredientToDish = async (dishId: string, ingredientId: string, quantity: number) => {
+    if (!user) return;
+    
+    try {
+      const dishInCart = cartDishes.find(d => d.dish.id === dishId);
+      const peopleCount = dishInCart ? dishInCart.people : 1;
+      
+      const { error } = await supabase
+        .from('user_carts')
+        .insert({
+          user_id: user.id,
+          ingredient_id: ingredientId,
+          quantity,
+          dish_id: dishId,
+          people: peopleCount
+        });
+        
+      if (error) throw error;
+      
+      await fetchCartItems();
+    } catch (error: any) {
+      console.error('Error adding ingredient to dish:', error);
+      toast({
+        variant: "destructive",
+        title: "Failed to add ingredient",
+        description: error.message,
+      });
+      throw error;
+    }
+  };
+
   return (
     <CartContext.Provider 
       value={{ 
@@ -356,7 +440,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearCart,
         addDishToCart,
         removeDishFromCart,
-        updatePeopleCount
+        updatePeopleCount,
+        customizeIngredient,
+        removeIngredientFromDish,
+        addIngredientToDish
       }}
     >
       {children}

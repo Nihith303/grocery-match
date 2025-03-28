@@ -1,20 +1,43 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { X, ShoppingCart, ChevronDown, ChevronUp, Plus, Minus } from "lucide-react";
+import { X, ShoppingCart, ChevronDown, ChevronUp, Plus, Minus, Edit } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { Profile } from "@/types/database.types";
+import { IngredientCustomizationModal } from "@/components/cart/IngredientCustomizationModal";
+import { ProfileValidationModal } from "@/components/checkout/ProfileValidationModal";
 
 const Cart = () => {
-  const { cartItems, cartDishes, loading, removeFromCart, updateQuantity, clearCart, removeDishFromCart, updatePeopleCount } = useCart();
+  const { 
+    cartItems, 
+    cartDishes, 
+    loading, 
+    removeFromCart, 
+    updateQuantity, 
+    clearCart, 
+    removeDishFromCart, 
+    updatePeopleCount,
+    customizeIngredient,
+    removeIngredientFromDish,
+    addIngredientToDish
+  } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [profileValidationOpen, setProfileValidationOpen] = useState(false);
+  const [missingProfileFields, setMissingProfileFields] = useState<string[]>([]);
+  const [customizationModalOpen, setCustomizationModalOpen] = useState(false);
+  const [selectedDish, setSelectedDish] = useState<{
+    dishId: string;
+    people: number;
+  } | null>(null);
 
   const calculateItemTotal = (quantity: number, price = 10) => {
     return quantity * price;
@@ -47,7 +70,63 @@ const Cart = () => {
     }
   };
 
-  const handleCheckout = () => {
+  const handleOpenCustomization = (dishId: string, people: number) => {
+    setSelectedDish({
+      dishId,
+      people
+    });
+    setCustomizationModalOpen(true);
+  };
+
+  const validateProfile = async () => {
+    if (!user) return false;
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+        
+      if (error) throw error;
+      
+      const profile = data as Profile;
+      const missingFields: string[] = [];
+      
+      if (!profile.address) {
+        missingFields.push('address');
+      }
+      
+      if (!profile.phone_number) {
+        missingFields.push('phone');
+      }
+      
+      setMissingProfileFields(missingFields);
+      return missingFields.length === 0;
+    } catch (error) {
+      console.error('Error validating profile:', error);
+      return false;
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (!user) {
+      toast({
+        title: "Please sign in",
+        description: "You need to be signed in to checkout",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+    
+    const isProfileValid = await validateProfile();
+    
+    if (!isProfileValid) {
+      setProfileValidationOpen(true);
+      return;
+    }
+    
     toast({
       title: "Order placed!",
       description: "Your order has been successfully placed.",
@@ -84,6 +163,10 @@ const Cart = () => {
   if (!user) {
     return null;
   }
+
+  const selectedDishData = selectedDish 
+    ? cartDishes.find(d => d.dish.id === selectedDish.dishId) 
+    : null;
 
   const total = calculateSubtotal() + 25; // Adding shipping fee
 
@@ -145,6 +228,14 @@ const Cart = () => {
                                 </Button>
                               </div>
                             </div>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex items-center gap-1"
+                              onClick={() => handleOpenCustomization(dishItem.dish.id, dishItem.people)}
+                            >
+                              <Edit className="h-3 w-3" /> Edit
+                            </Button>
                             <Button 
                               variant="destructive" 
                               size="sm" 
@@ -259,6 +350,29 @@ const Cart = () => {
             </div>
           </>
         )}
+
+        {/* Customization Modal */}
+        {selectedDishData && (
+          <IngredientCustomizationModal
+            isOpen={customizationModalOpen}
+            onClose={() => {
+              setCustomizationModalOpen(false);
+              setSelectedDish(null);
+            }}
+            dish={selectedDishData.dish}
+            ingredients={selectedDishData.ingredients}
+            people={selectedDishData.people}
+            onUpdateIngredient={customizeIngredient.bind(null, selectedDishData.dish.id)}
+            onRemoveIngredient={removeIngredientFromDish.bind(null, selectedDishData.dish.id)}
+            onAddIngredient={addIngredientToDish.bind(null, selectedDishData.dish.id)}
+          />
+        )}
+
+        {/* Profile Validation Modal */}
+        <ProfileValidationModal
+          isOpen={profileValidationOpen}
+          missingFields={missingProfileFields}
+        />
       </div>
     </Layout>
   );

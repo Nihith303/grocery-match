@@ -352,7 +352,7 @@ const CuisinePage = () => {
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline" className="text-white bg-gray-800">Close</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

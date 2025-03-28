@@ -15,7 +15,14 @@ import { X } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 
 interface RecipeFormProps {
-  onSubmit: (ingredients: string[], mealType: string, dietaryPreferences: string[]) => void;
+  onSubmit: (
+    ingredients: string[], 
+    mealType: string, 
+    dietaryPreferences: string[],
+    cuisine: string,
+    cookingTime: string,
+    skillLevel: string
+  ) => void;
   isLoading: boolean;
   disabled?: boolean;
 }
@@ -26,6 +33,8 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
   const [mealType, setMealType] = useState("dinner");
   const [difficulty, setDifficulty] = useState(50); // 0-100 scale
   const [dietaryPreferences, setDietaryPreferences] = useState<string[]>([]);
+  const [cuisine, setCuisine] = useState("any");
+  const [cookingTime, setCookingTime] = useState("30min");
   const [errors, setErrors] = useState<{ingredients?: string}>({});
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -63,8 +72,18 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
       return;
     }
     
+    // Get skill level text based on difficulty
+    const skillLevel = difficulty < 33 ? "Beginner" : difficulty < 66 ? "Intermediate" : "Advanced";
+    
     // Form is valid, submit
-    onSubmit(ingredients, mealType, dietaryPreferences);
+    onSubmit(
+      ingredients, 
+      mealType, 
+      dietaryPreferences, 
+      cuisine, 
+      cookingTime, 
+      skillLevel
+    );
   };
 
   const toggleDietaryPreference = (preference: string) => {
@@ -151,6 +170,51 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
         </div>
         
         <div className="space-y-2">
+          <Label htmlFor="cuisine">Cuisine Style</Label>
+          <Select 
+            value={cuisine} 
+            onValueChange={setCuisine}
+            disabled={isFormDisabled}
+          >
+            <SelectTrigger id="cuisine">
+              <SelectValue placeholder="Select cuisine" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any Cuisine</SelectItem>
+              <SelectItem value="italian">Italian</SelectItem>
+              <SelectItem value="mexican">Mexican</SelectItem>
+              <SelectItem value="asian">Asian</SelectItem>
+              <SelectItem value="mediterranean">Mediterranean</SelectItem>
+              <SelectItem value="indian">Indian</SelectItem>
+              <SelectItem value="american">American</SelectItem>
+              <SelectItem value="french">French</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="cooking-time">Maximum Cooking Time</Label>
+          <Select 
+            value={cookingTime} 
+            onValueChange={setCookingTime}
+            disabled={isFormDisabled}
+          >
+            <SelectTrigger id="cooking-time">
+              <SelectValue placeholder="Select cooking time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="15min">15 minutes</SelectItem>
+              <SelectItem value="30min">30 minutes</SelectItem>
+              <SelectItem value="45min">45 minutes</SelectItem>
+              <SelectItem value="1hour">1 hour</SelectItem>
+              <SelectItem value="2hours">2 hours or more</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="space-y-2">
           <Label>Dietary Preferences</Label>
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
@@ -230,7 +294,7 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
       
       {disabled && (
         <p className="text-center text-sm text-amber-600">
-          You've already used your daily recipe generation. Try again tomorrow!
+          You've used your daily recipe generation. Try again tomorrow!
         </p>
       )}
     </form>

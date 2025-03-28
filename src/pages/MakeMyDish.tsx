@@ -9,7 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
+import { Lock, AlertTriangle } from "lucide-react";
+import { generateRecipe, RecipePromptData } from "@/services/geminiService";
 
 export default function MakeMyDish() {
   const [recipe, setRecipe] = useState<string | null>(null);
@@ -17,10 +18,18 @@ export default function MakeMyDish() {
   const [checkingUsage, setCheckingUsage] = useState(true);
   const [hasUsedToday, setHasUsedToday] = useState(false);
   const [timeUntilNextRecipe, setTimeUntilNextRecipe] = useState<number | null>(null);
+  const [apiKeyMissing, setApiKeyMissing] = useState(false);
   const { toast } = useToast();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+
+  // Check if Gemini API key is set
+  useEffect(() => {
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
+      setApiKeyMissing(true);
+    }
+  }, []);
 
   // Check if user is authenticated and has used the feature today
   useEffect(() => {
@@ -90,7 +99,14 @@ export default function MakeMyDish() {
     };
   }, []);
 
-  const handleGenerateRecipe = async (ingredients: string[], mealType: string, dietaryPreferences: string[]) => {
+  const handleGenerateRecipe = async (
+    ingredients: string[], 
+    mealType: string, 
+    dietaryPreferences: string[],
+    cuisine: string,
+    cookingTime: string,
+    skillLevel: string
+  ) => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -110,54 +126,32 @@ export default function MakeMyDish() {
       return;
     }
 
+    if (apiKeyMissing) {
+      toast({
+        title: "API Key Missing",
+        description: "The Gemini API key is not configured. Please contact the administrator.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     setRecipe(null);
     
     try {
-      // In a real app, this would be an API call to a proxy server that calls Google Gemini
-      // For now, we'll simulate the API call with a timeout
+      // Create the recipe prompt data
+      const promptData: RecipePromptData = {
+        ingredients,
+        mealType,
+        dietaryPreferences,
+        cuisine,
+        cookingTime,
+        skillLevel
+      };
       
-      const dietaryString = dietaryPreferences.length > 0 
-        ? ` that is ${dietaryPreferences.join(", ")}` 
-        : "";
-      
-      const prompt = `Generate a detailed recipe for ${mealType} using ${ingredients.join(", ")} that serves 2-4 people${dietaryString}. Include preparation time, cooking instructions in numbered steps, and optional substitute suggestions. Format in markdown with clear sections.`;
-      
-      // Mock API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Mock response
-      const mockRecipe = `# ${mealType.charAt(0).toUpperCase() + mealType.slice(1)} Recipe with ${ingredients[0]} and ${ingredients.length > 1 ? ingredients[1] : "other ingredients"}
-
-## Ingredients
-${ingredients.map(ingredient => `- ${ingredient}`).join('\n')}
-
-## Preparation Time
-30 minutes
-
-## Cooking Time
-45 minutes
-
-## Instructions
-1. Prepare all the ingredients by washing and chopping as needed.
-2. Heat a large pan over medium heat.
-3. Add the first few ingredients and sauté for 5 minutes.
-4. Add remaining ingredients and cook for another 10-15 minutes.
-5. Serve hot and enjoy!
-
-## Substitutions
-- If you don't have ${ingredients[0]}, you can substitute with similar ingredients.
-- For a spicier version, add some chili flakes.
-
-## Nutrition Information (Estimated)
-- Calories: 350-450 per serving
-- Protein: 15-20g
-- Carbs: 30-40g
-- Fat: 15-20g
-
-Enjoy your meal!`;
-      
-      setRecipe(mockRecipe);
+      // Generate recipe with Gemini
+      const generatedRecipe = await generateRecipe(promptData);
+      setRecipe(generatedRecipe);
       
       // Record usage in Supabase
       await supabase
@@ -174,11 +168,11 @@ Enjoy your meal!`;
         title: "Recipe Generated!",
         description: "Enjoy your custom recipe. You can generate another one tomorrow.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating recipe:", error);
       toast({
         title: "Error",
-        description: "Failed to generate recipe. Please try again later.",
+        description: error.message || "Failed to generate recipe. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -216,6 +210,16 @@ Enjoy your meal!`;
           </p>
         </div>
         
+        {apiKeyMissing && (
+          <Alert className="mb-6 bg-amber-50 border border-amber-200">
+            <AlertTriangle className="h-5 w-5 text-amber-800" />
+            <AlertTitle className="text-amber-800 font-medium">API Key Not Configured</AlertTitle>
+            <AlertDescription className="text-amber-700">
+              The Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         {!loading && hasUsedToday && timeUntilNextRecipe !== null && (
           <Alert className="mb-6 bg-amber-50 border border-amber-200">
             <AlertTitle className="text-amber-800 font-medium">Daily Limit Reached</AlertTitle>
@@ -236,7 +240,7 @@ Enjoy your meal!`;
           <RecipeForm 
             onSubmit={handleGenerateRecipe} 
             isLoading={isLoading} 
-            disabled={hasUsedToday}
+            disabled={hasUsedToday || apiKeyMissing}
           />
         )}
         
@@ -244,7 +248,7 @@ Enjoy your meal!`;
           <div className="my-8 flex justify-center">
             <div className="animate-pulse flex flex-col items-center">
               <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-500">Crafting your recipe...</p>
+              <p className="mt-4 text-gray-500">Crafting your recipe with AI...</p>
             </div>
           </div>
         )}
