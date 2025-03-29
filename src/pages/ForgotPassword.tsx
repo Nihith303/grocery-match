@@ -87,7 +87,7 @@ const ForgotPassword = () => {
 
         <Card className="w-full">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Forgot Password</CardTitle>
+            <CardTitle className="text-2xl font-bold text-olive-700">Forgot Password</CardTitle>
             <CardDescription>
               Enter your email address and we'll send you a link to reset your password.
             </CardDescription>
@@ -137,7 +137,7 @@ const ForgotPassword = () => {
         <Dialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
+              <DialogTitle className="flex items-center gap-2 text-olive-700">
                 <CheckCircle2 className="h-5 w-5 text-green-500" />
                 Reset Link Sent
               </DialogTitle>

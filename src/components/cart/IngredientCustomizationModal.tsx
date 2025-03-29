@@ -183,7 +183,7 @@ export const IngredientCustomizationModal: React.FC<IngredientCustomizationModal
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Customize Ingredients for {dish.name}</DialogTitle>
+          <DialogTitle className="text-olive-600">Customize Ingredients for {dish.name}</DialogTitle>
           <DialogDescription>
             Add, remove or adjust ingredients for {people} {people === 1 ? 'person' : 'people'}
           </DialogDescription>
@@ -192,7 +192,7 @@ export const IngredientCustomizationModal: React.FC<IngredientCustomizationModal
         <div className="space-y-6">
           {/* Current ingredients section */}
           <div>
-            <h3 className="text-lg font-medium mb-3">Current Ingredients</h3>
+            <h3 className="text-lg font-medium mb-3 text-olive-600">Current Ingredients</h3>
             {currentIngredients.length === 0 ? (
               <p className="text-muted-foreground">No ingredients in this dish.</p>
             ) : (
@@ -241,53 +241,6 @@ export const IngredientCustomizationModal: React.FC<IngredientCustomizationModal
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Add new ingredients section */}
-          <div>
-            <h3 className="text-lg font-medium mb-3">Add Ingredients</h3>
-            <Input
-              type="search"
-              placeholder="Search for ingredients..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="mb-4"
-            />
-
-            {loading ? (
-              <p className="text-center py-4">Loading ingredients...</p>
-            ) : filteredIngredients.length === 0 ? (
-              <p className="text-muted-foreground">No matching ingredients found.</p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {filteredIngredients.slice(0, 10).map((ing) => (
-                  <div key={ing.id} className="border rounded-lg p-3 flex justify-between items-center">
-                    <div>
-                      <div className="font-medium">{ing.name}</div>
-                      <div className="text-sm text-muted-foreground flex items-center gap-1">
-                        {ing.category && <Badge variant="outline">{ing.category}</Badge>}
-                        {ing.unit && <span>{ing.unit}</span>}
-                      </div>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex items-center gap-1"
-                      onClick={() => handleAddIngredient(ing.id)}
-                      disabled={loading}
-                    >
-                      <Plus className="h-3 w-3" /> Add
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            {filteredIngredients.length > 10 && (
-              <p className="text-sm text-muted-foreground mt-2">
-                Showing 10 of {filteredIngredients.length} ingredients. Refine your search to see more.
-              </p>
             )}
           </div>
 

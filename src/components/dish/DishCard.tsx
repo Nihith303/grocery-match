@@ -114,7 +114,7 @@ export const DishCard = ({ dish, showIngredients = false }: DishCardProps) => {
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-start">
-          <CardTitle className="text-xl">{dish.name}</CardTitle>
+          <CardTitle className="text-xl text-olive-600">{dish.name}</CardTitle>
           <Badge variant="outline" className="capitalize">
             {dish.cuisine}
           </Badge>
@@ -149,7 +149,7 @@ export const DishCard = ({ dish, showIngredients = false }: DishCardProps) => {
 
         {showIngredientsPanel && (
           <div className="mt-3 border rounded-md p-3">
-            <h4 className="font-medium mb-2">Ingredients:</h4>
+            <h4 className="font-medium mb-2 text-olive-600">Ingredients:</h4>
             {loading ? (
               <div className="flex justify-center py-4">
                 <Loader2 className="h-5 w-5 animate-spin text-gray-500" />

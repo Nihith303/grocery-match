@@ -181,8 +181,8 @@ const CuisinePage = () => {
           <p className="text-lg text-gray-600">{cuisine.description}</p>
         </div>
 
-        <h2 className="text-2xl font-bold mb-6">
-          Popular <span className="accent-text">{cuisine.name}</span> Dishes
+        <h2 className="text-2xl font-bold mb-6 text-olive-600">
+          Popular <span className="text-orange-500">{cuisine.name}</span> Dishes
         </h2>
 
         {cuisineDishes.length > 0 ? (
@@ -190,7 +190,7 @@ const CuisinePage = () => {
             {cuisineDishes.map((dish) => (
               <Card key={dish.id} className="h-full flex flex-col">
                 <CardHeader>
-                  <CardTitle>{dish.name}</CardTitle>
+                  <CardTitle className="text-olive-600">{dish.name}</CardTitle>
                   <CardDescription>{dish.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col gap-4">
@@ -204,7 +204,7 @@ const CuisinePage = () => {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle className="dialog-title">{dish.name} Ingredients</DialogTitle>
+                        <DialogTitle className="dialog-title text-olive-600">{dish.name} Ingredients</DialogTitle>
                         <DialogDescription>
                           Here are all the ingredients needed for this dish.
                         </DialogDescription>
@@ -254,7 +254,7 @@ const CuisinePage = () => {
 
                   {/* YouTube Video Section */}
                   <div className="mt-2">
-                    <h3 className="text-sm font-semibold mb-2">Watch the Recipe</h3>
+                    <h3 className="text-sm font-semibold mb-2 text-olive-600">Watch the Recipe</h3>
                     <div 
                       className={`relative rounded-md overflow-hidden aspect-video bg-gray-100 ${
                         !dish.youtubeVideoId ? 'bg-gray-50 border border-gray-200' : ''
@@ -331,7 +331,7 @@ const CuisinePage = () => {
       <Dialog open={!!activeVideoId} onOpenChange={(open) => !open && setActiveVideoId(null)}>
         <DialogContent className="sm:max-w-3xl max-h-[90vh]">
           <DialogHeader>
-            <DialogTitle className="dialog-title">Recipe Video</DialogTitle>
+            <DialogTitle className="dialog-title text-olive-600">Recipe Video</DialogTitle>
             <DialogDescription>
               Watch the full recipe demonstration
             </DialogDescription>
