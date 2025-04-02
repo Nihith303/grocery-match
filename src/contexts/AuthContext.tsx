@@ -113,7 +113,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetPassword = async (email: string) => {
     try {
       // Update the redirectTo URL to point to the reset-password page
-      const resetUrl = `${window.location.origin}/reset-password`;
+      const resetUrl = `https://grocery-match.vercel.app/reset-password`;
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: resetUrl,
