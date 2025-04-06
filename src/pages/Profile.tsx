@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
@@ -7,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Layout } from "@/components/layout/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/types/database.types";
@@ -181,149 +179,145 @@ const ProfilePage = () => {
 
   if (isLoading && !profile) {
     return (
-      <Layout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          Loading profile...
-        </div>
-      </Layout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+        Loading profile...
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white shadow-md rounded-lg p-6">
-          {fromCheckout && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-amber-800">
-              <h2 className="font-semibold text-lg mb-1">Complete Your Profile</h2>
-              <p>Please provide your delivery address and phone number to proceed with checkout.</p>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-white shadow-md rounded-lg p-6">
+        {fromCheckout && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-amber-800">
+            <h2 className="font-semibold text-lg mb-1">Complete Your Profile</h2>
+            <p>Please provide your delivery address and phone number to proceed with checkout.</p>
+          </div>
+        )}
+
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Your Profile</h1>
+        
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          )}
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Your Profile</h1>
-          
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email address</FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="email" 
+                      placeholder="your@email.com" 
+                      disabled
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Phone Number 
+                    {fromCheckout && <span className="text-red-500 ml-1">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <Input 
+                      type="tel" 
+                      placeholder="(123) 456-7890" 
+                      {...field}
+                      onChange={(e) => {
+                        handlePhoneInput(e);
+                        field.onChange(e);
+                      }}
+                      className={fromCheckout && !field.value ? "border-red-300 focus:border-red-500" : ""}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email address</FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="email" 
-                        placeholder="your@email.com" 
-                        disabled
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Address
+                    {fromCheckout && <span className="text-red-500 ml-1">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <Input 
+                      placeholder="123 Main St, City, State, Zip" 
+                      {...field}
+                      className={fromCheckout && !field.value ? "border-red-300 focus:border-red-500" : ""} 
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Phone Number 
-                      {fromCheckout && <span className="text-red-500 ml-1">*</span>}
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        type="tel" 
-                        placeholder="(123) 456-7890" 
-                        {...field}
-                        onChange={(e) => {
-                          handlePhoneInput(e);
-                          field.onChange(e);
-                        }}
-                        className={fromCheckout && !field.value ? "border-red-300 focus:border-red-500" : ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Address
-                      {fromCheckout && <span className="text-red-500 ml-1">*</span>}
-                    </FormLabel>
-                    <FormControl>
-                      <Input 
-                        placeholder="123 Main St, City, State, Zip" 
-                        {...field}
-                        className={fromCheckout && !field.value ? "border-red-300 focus:border-red-500" : ""} 
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-between items-center pt-4">
-                {fromCheckout && (
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    onClick={() => navigate("/cart")}
-                    disabled={isLoading}
-                  >
-                    Back to Cart
-                  </Button>
-                )}
+            <div className="flex justify-between items-center pt-4">
+              {fromCheckout && (
                 <Button 
-                  type="submit" 
-                  className={fromCheckout ? "" : "w-full"} 
+                  type="button" 
+                  variant="outline"
+                  onClick={() => navigate("/cart")}
                   disabled={isLoading}
                 >
-                  {isLoading ? "Updating..." : fromCheckout ? "Save and Continue" : "Update Profile"}
+                  Back to Cart
                 </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+              )}
+              <Button 
+                type="submit" 
+                className={fromCheckout ? "" : "w-full"} 
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : fromCheckout ? "Save and Continue" : "Update Profile"}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
-    </Layout>
+    </div>
   );
 };
 

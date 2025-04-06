@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
@@ -140,6 +139,20 @@ export function Navbar() {
                           </p>
                         </Link>
                       </li>
+                      <NavigationMenuItem>
+                        <Link
+                          to="/feedback"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none flex items-center">
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Send Feedback
+                          </div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Share your thoughts and suggestions
+                          </p>
+                        </Link>
+                      </NavigationMenuItem>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -213,7 +226,7 @@ export function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
             <Link to="/cart" className="relative mr-2">
               <Button variant="outline" size="icon">
                 <ShoppingCart className="h-5 w-5" />
@@ -291,18 +304,6 @@ export function Navbar() {
               </div>
             </Link>
             {user && (
-              <Link
-                to="/favorites"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <div className="flex items-center">
-                  <Heart className="h-4 w-4 mr-2" />
-                  Favorites
-                </div>
-              </Link>
-            )}
-            {user ? (
               <>
                 <Link
                   to="/profile"
@@ -314,6 +315,20 @@ export function Navbar() {
                     Profile
                   </div>
                 </Link>
+                <Link
+                  to="/favorites"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="flex items-center">
+                    <Heart className="h-4 w-4 mr-2" />
+                    Favorites
+                  </div>
+                </Link>
+              </>
+            )}
+            {user ? (
+              <>
                 <button
                   onClick={() => {
                     handleSignOut();

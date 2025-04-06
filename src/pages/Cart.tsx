@@ -1,7 +1,5 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Layout } from "@/components/layout/Layout";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -236,14 +234,12 @@ const Cart = () => {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-lg font-medium">Loading your delicious items...</p>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-lg font-medium">Loading your delicious items...</p>
         </div>
-      </Layout>
+      </div>
     );
   }
 
@@ -446,377 +442,369 @@ const Cart = () => {
   );
 
   return (
-    <Layout>
-      <div 
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
-        style={{
-          background: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23FFB347' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-          fontFamily: "'Nunito', sans-serif"
-        }}
-      >
-        <h1 className="text-3xl font-bold text-[#FF4444] mb-6 transition-transform hover:scale-[1.02]">Your Delicious Cart</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-[#FF4444] mb-6 transition-transform hover:scale-[1.02]">Your Delicious Cart</h1>
 
-        {/* Mobile view button */}
-        <div className="md:hidden mb-6">
-          <MobileCartView />
-        </div>
+      {/* Mobile view button */}
+      <div className="md:hidden mb-6">
+        <MobileCartView />
+      </div>
 
-        {/* Desktop view */}
-        <div className="hidden md:block">
-          {cartItems.length === 0 && cartDishes.length === 0 ? (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-10 bg-white rounded-lg shadow-md"
+      {/* Desktop view */}
+      <div className="hidden md:block">
+        {cartItems.length === 0 && cartDishes.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-10 bg-white rounded-lg shadow-md"
+          >
+            <ShoppingCart className="h-16 w-16 mx-auto text-[#FFB347] mb-4" />
+            <h2 className="text-xl font-medium text-gray-900 mb-2">Your cart is feeling a bit empty</h2>
+            <p className="text-gray-500 mb-6">Let's fill it with some delicious ingredients!</p>
+            <Button 
+              onClick={() => navigate("/")} 
+              className="bg-[#003366] hover:bg-[#002244] transition-transform hover:scale-105"
             >
-              <ShoppingCart className="h-16 w-16 mx-auto text-[#FFB347] mb-4" />
-              <h2 className="text-xl font-medium text-gray-900 mb-2">Your cart is feeling a bit empty</h2>
-              <p className="text-gray-500 mb-6">Let's fill it with some delicious ingredients!</p>
-              <Button 
-                onClick={() => navigate("/")} 
-                className="bg-[#003366] hover:bg-[#002244] transition-transform hover:scale-105"
-              >
-                Explore Delicious Options
-              </Button>
-            </motion.div>
-          ) : (
-            <>
-              <div className="space-y-6 mb-6">
-                {/* Dishes with ingredients */}
-                {cartDishes.length > 0 && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white shadow-md rounded-lg overflow-hidden mb-6"
-                  >
-                    <h2 className="text-xl font-semibold p-4 border-b bg-gradient-to-r from-[#FFB347]/10 to-transparent text-[#FF4444]">Your Dishes</h2>
-                    
-                    <AnimatePresence>
-                      {cartDishes.map((dishItem) => (
-                        <Collapsible key={dishItem.dish.id} className="border-b last:border-b-0">
-                          <div className="bg-gray-50 p-4 hover:bg-[#FFB347]/5 transition-colors">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center">
-                                <CollapsibleTrigger className="mr-2">
-                                  <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
-                                    <Button variant="ghost" size="icon" className="text-[#003366]">
-                                      <ChevronDown className="h-5 w-5" />
-                                    </Button>
-                                  </motion.div>
-                                </CollapsibleTrigger>
-                                <div>
-                                  <h3 className="font-medium text-lg">{dishItem.dish.name}</h3>
-                                  <p className="text-sm text-gray-500">{dishItem.ingredients.length} ingredients</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-4">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-sm text-gray-600">People:</span>
-                                  <div className="flex items-center border rounded-md">
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 rounded-r-none hover:bg-[#FFB347]/10"
-                                      onClick={() => handlePeopleChange(dishItem.dish.id, Math.max(1, dishItem.people - 1))}
-                                      disabled={isUpdatePending}
-                                    >
-                                      <Minus className="h-3 w-3" />
-                                    </Button>
-                                    <motion.span 
-                                      key={dishItem.people}
-                                      initial={{ opacity: 0, scale: 0.8 }}
-                                      animate={{ opacity: 1, scale: 1 }}
-                                      className="w-8 text-center"
-                                    >
-                                      {dishItem.people}
-                                    </motion.span>
-                                    <Button 
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 rounded-l-none hover:bg-[#FFB347]/10"
-                                      onClick={() => handlePeopleChange(dishItem.dish.id, dishItem.people + 1)}
-                                      disabled={isUpdatePending}
-                                    >
-                                      <Plus className="h-3 w-3" />
-                                    </Button>
-                                  </div>
-                                </div>
-                                
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="flex items-center gap-1 border-[#003366] text-[#003366] hover:bg-[#003366]/10 transition-colors hover:scale-105"
-                                  onClick={() => handleOpenCustomization(dishItem.dish.id, dishItem.people)}
-                                >
-                                  <Edit className="h-3 w-3" /> Edit
-                                </Button>
-                                
-                                <Button 
-                                  variant="outline" 
-                                  size="sm" 
-                                  className="border-[#FF4444] text-[#FF4444] hover:bg-[#FF4444]/10 transition-colors hover:scale-105"
-                                  onClick={() => removeDishFromCart(dishItem.dish.id)}
-                                >
-                                  Remove
-                                </Button>
+              Explore Delicious Options
+            </Button>
+          </motion.div>
+        ) : (
+          <>
+            <div className="space-y-6 mb-6">
+              {/* Dishes with ingredients */}
+              {cartDishes.length > 0 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white shadow-md rounded-lg overflow-hidden mb-6"
+                >
+                  <h2 className="text-xl font-semibold p-4 border-b bg-gradient-to-r from-[#FFB347]/10 to-transparent text-[#FF4444]">Your Dishes</h2>
+                  
+                  <AnimatePresence>
+                    {cartDishes.map((dishItem) => (
+                      <Collapsible key={dishItem.dish.id} className="border-b last:border-b-0">
+                        <div className="bg-gray-50 p-4 hover:bg-[#FFB347]/5 transition-colors">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <CollapsibleTrigger className="mr-2">
+                                <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
+                                  <Button variant="ghost" size="icon" className="text-[#003366]">
+                                    <ChevronDown className="h-5 w-5" />
+                                  </Button>
+                                </motion.div>
+                              </CollapsibleTrigger>
+                              <div>
+                                <h3 className="font-medium text-lg">{dishItem.dish.name}</h3>
+                                <p className="text-sm text-gray-500">{dishItem.ingredients.length} ingredients</p>
                               </div>
                             </div>
-                          </div>
-                          
-                          <CollapsibleContent>
-                            <Table>
-                              <TableHeader>
-                                <TableRow className="bg-gradient-to-r from-[#FFB347]/10 to-transparent">
-                                  <TableHead className="w-[40%]">Ingredient</TableHead>
-                                  <TableHead>Base Quantity</TableHead>
-                                  <TableHead className="text-right">Adjusted Quantity</TableHead>
-                                  <TableHead className="text-right">Price</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                <AnimatePresence>
-                                  {dishItem.ingredients.map((item) => (
-                                    <motion.tr
-                                      key={item.id}
-                                      initial={{ opacity: 0, x: -5 }}
-                                      animate={{ opacity: 1, x: 0 }}
-                                      exit={{ opacity: 0, x: 5 }}
-                                      transition={{ duration: 0.2 }}
-                                      className="hover:bg-[#FFB347]/5 group"
-                                    >
-                                      <TableCell className="font-medium pl-10">
-                                        {item.ingredient?.name}
-                                        <div className="text-sm text-gray-500">{item.ingredient?.category}</div>
-                                      </TableCell>
-                                      <TableCell>{item.quantity} {item.ingredient?.unit || 'units'}</TableCell>
-                                      <TableCell className="text-right">
-                                        <motion.span
-                                          key={item.quantity * dishItem.people}
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          className="font-medium"
-                                        >
-                                          {item.quantity * dishItem.people} {item.ingredient?.unit || 'units'}
-                                        </motion.span>
-                                      </TableCell>
-                                      <TableCell className="text-right">
-                                        <motion.span
-                                          key={calculateItemTotal(item.quantity * dishItem.people)}
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          className="font-medium text-[#FF4444]"
-                                        >
-                                          ₹ {calculateItemTotal(item.quantity * dishItem.people).toFixed(2)}
-                                        </motion.span>
-                                      </TableCell>
-                                    </motion.tr>
-                                  ))}
-                                </AnimatePresence>
-                              </TableBody>
-                            </Table>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ))}
-                    </AnimatePresence>
-                  </motion.div>
-                )}
-                
-                {/* Individual ingredients (not part of a dish) */}
-                {cartItems.length > 0 && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="bg-white shadow-md rounded-lg overflow-hidden"
-                  >
-                    <h2 className="text-xl font-semibold p-4 border-b bg-gradient-to-r from-[#FFB347]/10 to-transparent text-[#FF4444]">Individual Ingredients</h2>
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-gradient-to-r from-[#FFB347]/10 to-transparent">
-                          <TableHead className="w-[40%]">Ingredient</TableHead>
-                          <TableHead>Quantity</TableHead>
-                          <TableHead className="text-right">Price</TableHead>
-                          <TableHead className="w-[100px]">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <AnimatePresence>
-                          {cartItems.map((item) => (
-                            <motion.tr 
-                              key={item.id}
-                              initial={{ opacity: 0, y: 5 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -5 }}
-                              transition={{ duration: 0.2 }}
-                              className="hover:bg-[#FFB347]/5 group"
-                            >
-                              <TableCell className="font-medium">
-                                {item.ingredient?.name}
-                                <div className="text-sm text-gray-500">{item.ingredient?.category}</div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center border rounded-md w-fit">
+                            <div className="flex items-center space-x-4">
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm text-gray-600">People:</span>
+                                <div className="flex items-center border rounded-md">
                                   <Button 
                                     variant="ghost" 
                                     size="icon" 
                                     className="h-8 w-8 rounded-r-none hover:bg-[#FFB347]/10"
-                                    onClick={() => handleQuantityChange(item.id, (item.quantity - 1).toString())}
-                                    disabled={isUpdatePending || item.quantity <= 1}
+                                    onClick={() => handlePeopleChange(dishItem.dish.id, Math.max(1, dishItem.people - 1))}
+                                    disabled={isUpdatePending}
                                   >
                                     <Minus className="h-3 w-3" />
                                   </Button>
                                   <motion.span 
-                                    key={item.quantity}
+                                    key={dishItem.people}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="w-8 text-center"
                                   >
-                                    {item.quantity}
+                                    {dishItem.people}
                                   </motion.span>
                                   <Button 
                                     variant="ghost" 
                                     size="icon" 
                                     className="h-8 w-8 rounded-l-none hover:bg-[#FFB347]/10"
-                                    onClick={() => handleQuantityChange(item.id, (item.quantity + 1).toString())}
+                                    onClick={() => handlePeopleChange(dishItem.dish.id, dishItem.people + 1)}
                                     disabled={isUpdatePending}
                                   >
                                     <Plus className="h-3 w-3" />
                                   </Button>
                                 </div>
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <motion.span
-                                  key={calculateItemTotal(item.quantity)}
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  className="font-medium text-[#FF4444]"
-                                >
-                                  ₹ {calculateItemTotal(item.quantity).toFixed(2)}
-                                </motion.span>
-                              </TableCell>
-                              <TableCell>
+                              </div>
+                              
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="flex items-center gap-1 border-[#003366] text-[#003366] hover:bg-[#003366]/10 transition-colors hover:scale-105"
+                                onClick={() => handleOpenCustomization(dishItem.dish.id, dishItem.people)}
+                              >
+                                <Edit className="h-3 w-3" /> Edit
+                              </Button>
+                              
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="border-[#FF4444] text-[#FF4444] hover:bg-[#FF4444]/10 transition-colors hover:scale-105"
+                                onClick={() => removeDishFromCart(dishItem.dish.id)}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <CollapsibleContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow className="bg-gradient-to-r from-[#FFB347]/10 to-transparent">
+                                <TableHead className="w-[40%]">Ingredient</TableHead>
+                                <TableHead>Base Quantity</TableHead>
+                                <TableHead className="text-right">Adjusted Quantity</TableHead>
+                                <TableHead className="text-right">Price</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <AnimatePresence>
+                                {dishItem.ingredients.map((item) => (
+                                  <motion.tr
+                                    key={item.id}
+                                    initial={{ opacity: 0, x: -5 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 5 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="hover:bg-[#FFB347]/5 group"
+                                  >
+                                    <TableCell className="font-medium pl-10">
+                                      {item.ingredient?.name}
+                                      <div className="text-sm text-gray-500">{item.ingredient?.category}</div>
+                                    </TableCell>
+                                    <TableCell>{item.quantity} {item.ingredient?.unit || 'units'}</TableCell>
+                                    <TableCell className="text-right">
+                                      <motion.span
+                                        key={item.quantity * dishItem.people}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="font-medium"
+                                      >
+                                        {item.quantity * dishItem.people} {item.ingredient?.unit || 'units'}
+                                      </motion.span>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                      <motion.span
+                                        key={calculateItemTotal(item.quantity * dishItem.people)}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="font-medium text-[#FF4444]"
+                                      >
+                                        ₹ {calculateItemTotal(item.quantity * dishItem.people).toFixed(2)}
+                                      </motion.span>
+                                    </TableCell>
+                                  </motion.tr>
+                                ))}
+                              </AnimatePresence>
+                            </TableBody>
+                          </Table>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+              
+              {/* Individual ingredients (not part of a dish) */}
+              {cartItems.length > 0 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="bg-white shadow-md rounded-lg overflow-hidden"
+                >
+                  <h2 className="text-xl font-semibold p-4 border-b bg-gradient-to-r from-[#FFB347]/10 to-transparent text-[#FF4444]">Individual Ingredients</h2>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gradient-to-r from-[#FFB347]/10 to-transparent">
+                        <TableHead className="w-[40%]">Ingredient</TableHead>
+                        <TableHead>Quantity</TableHead>
+                        <TableHead className="text-right">Price</TableHead>
+                        <TableHead className="w-[100px]">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <AnimatePresence>
+                        {cartItems.map((item) => (
+                          <motion.tr 
+                            key={item.id}
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -5 }}
+                            transition={{ duration: 0.2 }}
+                            className="hover:bg-[#FFB347]/5 group"
+                          >
+                            <TableCell className="font-medium">
+                              {item.ingredient?.name}
+                              <div className="text-sm text-gray-500">{item.ingredient?.category}</div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center border rounded-md w-fit">
                                 <Button 
                                   variant="ghost" 
                                   size="icon" 
-                                  onClick={() => removeFromCart(item.ingredient_id)}
-                                  disabled={isUpdatePending}
-                                  className="text-[#FF4444] opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#FF4444]/10"
+                                  className="h-8 w-8 rounded-r-none hover:bg-[#FFB347]/10"
+                                  onClick={() => handleQuantityChange(item.id, (item.quantity - 1).toString())}
+                                  disabled={isUpdatePending || item.quantity <= 1}
                                 >
-                                  <X className="h-4 w-4" />
+                                  <Minus className="h-3 w-3" />
                                 </Button>
-                              </TableCell>
-                            </motion.tr>
-                          ))}
-                        </AnimatePresence>
-                      </TableBody>
-                    </Table>
-                  </motion.div>
-                )}
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.2 }}
-                  className="bg-white p-6 shadow-md rounded-lg mb-6 overflow-hidden relative"
-                >
-                  <div className="flex justify-between mb-2">
-                    <span>Subtotal</span>
-                    <motion.span
-                      key={calculateSubtotal()}
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                    >
-                      ₹ {calculateSubtotal().toFixed(2)}
-                    </motion.span>
-                  </div>
-                  <div className="flex justify-between mb-2">
-                    <span>Packaging and handling fee</span>
-                    <span>₹ 25.00</span>
-                  </div>
-                  <div className="border-t border-gray-200 my-4"></div>
-                  <div className="flex justify-between font-bold">
-                    <span>Total</span>
-                    <motion.span
-                      key={total}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="text-green-500"
-                    >
-                      ₹ {total.toFixed(2)}
-                    </motion.span>
-                  </div>
-                  
-                  {/* Background pattern */}
-                  <div className="absolute right-0 bottom-0 w-1/2 h-1/2 opacity-5 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FF4444" strokeWidth="0.5">
-                      <path d="M12 4.5c-3.4 0-6.38 2.24-7.33 5.5h14.66c-.95-3.26-3.93-5.5-7.33-5.5z" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M20.29 12.5H3.71c.18.64.43 1.24.74 1.8h15.1c.31-.56.56-1.16.74-1.8z" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M19.33 16.5H4.67c2.46 2.1 5.72 2.7 8.65 1.58 1.2-.46 2.28-1.13 3.14-1.97.27-.28.52-.57.73-.89.1-.14.14-.21.14-.22z" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
+                                <motion.span 
+                                  key={item.quantity}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  className="w-8 text-center"
+                                >
+                                  {item.quantity}
+                                </motion.span>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 rounded-l-none hover:bg-[#FFB347]/10"
+                                  onClick={() => handleQuantityChange(item.id, (item.quantity + 1).toString())}
+                                  disabled={isUpdatePending}
+                                >
+                                  <Plus className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <motion.span
+                                key={calculateItemTotal(item.quantity)}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="font-medium text-[#FF4444]"
+                              >
+                                ₹ {calculateItemTotal(item.quantity).toFixed(2)}
+                              </motion.span>
+                            </TableCell>
+                            <TableCell>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                onClick={() => removeFromCart(item.ingredient_id)}
+                                disabled={isUpdatePending}
+                                className="text-[#FF4444] opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#FF4444]/10"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </motion.tr>
+                        ))}
+                      </AnimatePresence>
+                    </TableBody>
+                  </Table>
                 </motion.div>
+              )}
+            </div>
 
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.3 }}
-                  className="flex flex-col gap-4 justify-end h-full"
-                >
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate("/")} 
-                    className="hover:scale-[1.02] transition-transform border-[#FFB347] text-[#FFB347] hover:bg-[#FFB347]/10"
+            <div className="grid md:grid-cols-2 gap-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="bg-white p-6 shadow-md rounded-lg mb-6 overflow-hidden relative"
+              >
+                <div className="flex justify-between mb-2">
+                  <span>Subtotal</span>
+                  <motion.span
+                    key={calculateSubtotal()}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
                   >
-                    Continue Shopping
+                    ₹ {calculateSubtotal().toFixed(2)}
+                  </motion.span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span>Packaging and handling fee</span>
+                  <span>₹ 25.00</span>
+                </div>
+                <div className="border-t border-gray-200 my-4"></div>
+                <div className="flex justify-between font-bold">
+                  <span>Total</span>
+                  <motion.span
+                    key={total}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-green-500"
+                  >
+                    ₹ {total.toFixed(2)}
+                  </motion.span>
+                </div>
+                
+                {/* Background pattern */}
+                <div className="absolute right-0 bottom-0 w-1/2 h-1/2 opacity-5 pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FF4444" strokeWidth="0.5">
+                    <path d="M12 4.5c-3.4 0-6.38 2.24-7.33 5.5h14.66c-.95-3.26-3.93-5.5-7.33-5.5z" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M20.29 12.5H3.71c.18.64.43 1.24.74 1.8h15.1c.31-.56.56-1.16.74-1.8z" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M19.33 16.5H4.67c2.46 2.1 5.72 2.7 8.65 1.58 1.2-.46 2.28-1.13 3.14-1.97.27-.28.52-.57.73-.89.1-.14.14-.21.14-.22z" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+                className="flex flex-col gap-4 justify-end h-full"
+              >
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate("/")} 
+                  className="hover:scale-[1.02] transition-transform border-[#FFB347] text-[#FFB347] hover:bg-[#FFB347]/10"
+                >
+                  Continue Shopping
+                </Button>
+                <div className="flex gap-4">
+                  <Button 
+                    variant="destructive" 
+                    onClick={clearCart}
+                    className="flex-1 bg-[#FF4444] hover:bg-[#FF3333] hover:scale-[1.02] transition-all"
+                  >
+                    Clear Cart
                   </Button>
-                  <div className="flex gap-4">
-                    <Button 
-                      variant="destructive" 
-                      onClick={clearCart}
-                      className="flex-1 bg-[#FF4444] hover:bg-[#FF3333] hover:scale-[1.02] transition-all"
-                    >
-                      Clear Cart
-                    </Button>
-                    <Button 
-                      onClick={handleCheckout}
-                      className="flex-1 bg-[#003366] hover:bg-[#002244] hover:scale-[1.02] transition-all"
-                    >
-                      Checkout
-                    </Button>
-                  </div>
-                </motion.div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Customization Modal */}
-        {selectedDishData && (
-          <IngredientCustomizationModal
-            isOpen={customizationModalOpen}
-            onClose={() => {
-              setCustomizationModalOpen(false);
-              setSelectedDish(null);
-            }}
-            dish={selectedDishData.dish}
-            ingredients={selectedDishData.ingredients}
-            people={selectedDishData.people}
-            onUpdateIngredient={customizeIngredient.bind(null, selectedDishData.dish.id)}
-            onRemoveIngredient={removeIngredientFromDish.bind(null, selectedDishData.dish.id)}
-            onAddIngredient={addIngredientToDish.bind(null, selectedDishData.dish.id)}
-          />
+                  <Button 
+                    onClick={handleCheckout}
+                    className="flex-1 bg-[#003366] hover:bg-[#002244] hover:scale-[1.02] transition-all"
+                  >
+                    Checkout
+                  </Button>
+                </div>
+              </motion.div>
+            </div>
+          </>
         )}
-
-        {/* Profile Validation Modal */}
-        <ProfileValidationModal
-          isOpen={profileValidationOpen}
-          missingFields={missingProfileFields}
-        />
       </div>
-    </Layout>
+
+      {/* Customization Modal */}
+      {selectedDishData && (
+        <IngredientCustomizationModal
+          isOpen={customizationModalOpen}
+          onClose={() => {
+            setCustomizationModalOpen(false);
+            setSelectedDish(null);
+          }}
+          dish={selectedDishData.dish}
+          ingredients={selectedDishData.ingredients}
+          people={selectedDishData.people}
+          onUpdateIngredient={customizeIngredient.bind(null, selectedDishData.dish.id)}
+          onRemoveIngredient={removeIngredientFromDish.bind(null, selectedDishData.dish.id)}
+          onAddIngredient={addIngredientToDish.bind(null, selectedDishData.dish.id)}
+        />
+      )}
+
+      {/* Profile Validation Modal */}
+      <ProfileValidationModal
+        isOpen={profileValidationOpen}
+        missingFields={missingProfileFields}
+      />
+    </div>
   );
 };
 

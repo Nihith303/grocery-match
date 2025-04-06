@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { RecipeForm } from "@/components/recipe/RecipeForm";
@@ -183,78 +182,74 @@ export default function MakeMyDish() {
   // If user is not logged in, show auth requirement
   if (!loading && !user) {
     return (
-      <Layout>
-        <div className="max-w-4xl mx-auto px-4 py-12">
-          <Alert className="mb-8 bg-primary/5 border-primary/20">
-            <Lock className="h-5 w-5 text-primary" />
-            <AlertTitle className="text-xl font-bold mb-2">Authentication Required</AlertTitle>
-            <AlertDescription className="text-gray-600 mb-4">
-              This feature is available only for logged in users. Please sign in to create custom recipes.
-            </AlertDescription>
-            <Button onClick={() => navigate("/auth")} className="mt-2">
-              Sign In
-            </Button>
-          </Alert>
-        </div>
-      </Layout>
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <Alert className="mb-8 bg-primary/5 border-primary/20">
+          <Lock className="h-5 w-5 text-primary" />
+          <AlertTitle className="text-xl font-bold mb-2">Authentication Required</AlertTitle>
+          <AlertDescription className="text-gray-600 mb-4">
+            This feature is available only for logged in users. Please sign in to create custom recipes.
+          </AlertDescription>
+          <Button onClick={() => navigate("/auth")} className="mt-2">
+            Sign In
+          </Button>
+        </Alert>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Make My Dish</h1>
-          <p className="text-gray-600">
-            Enter ingredients you have on hand, and we'll generate a delicious recipe for you!
-          </p>
-        </div>
-        
-        {apiKeyMissing && (
-          <Alert className="mb-6 bg-amber-50 border border-amber-200">
-            <AlertTriangle className="h-5 w-5 text-amber-800" />
-            <AlertTitle className="text-amber-800 font-medium">API Key Not Configured</AlertTitle>
-            <AlertDescription className="text-amber-700">
-              The Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.
-            </AlertDescription>
-          </Alert>
-        )}
-        
-        {!loading && hasUsedToday && timeUntilNextRecipe !== null && (
-          <Alert className="mb-6 bg-amber-50 border border-amber-200">
-            <AlertTitle className="text-amber-800 font-medium">Daily Limit Reached</AlertTitle>
-            <AlertDescription className="text-amber-700">
-              You've already used this feature today. Next recipe available in: {Math.floor(timeUntilNextRecipe / 60)} hours and {timeUntilNextRecipe % 60} minutes.
-            </AlertDescription>
-          </Alert>
-        )}
-        
-        {checkingUsage ? (
-          <div className="my-8 flex justify-center">
-            <div className="animate-pulse flex flex-col items-center">
-              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-500">Checking your usage...</p>
-            </div>
-          </div>
-        ) : (
-          <RecipeForm 
-            onSubmit={handleGenerateRecipe} 
-            isLoading={isLoading} 
-            disabled={hasUsedToday || apiKeyMissing}
-          />
-        )}
-        
-        {isLoading && (
-          <div className="my-8 flex justify-center">
-            <div className="animate-pulse flex flex-col items-center">
-              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-gray-500">Crafting your recipe with AI...</p>
-            </div>
-          </div>
-        )}
-        
-        {recipe && !isLoading && <RecipeResult recipe={recipe} />}
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold mb-2">Make My Dish</h1>
+        <p className="text-gray-600">
+          Enter ingredients you have on hand, and we'll generate a delicious recipe for you!
+        </p>
       </div>
-    </Layout>
+      
+      {apiKeyMissing && (
+        <Alert className="mb-6 bg-amber-50 border border-amber-200">
+          <AlertTriangle className="h-5 w-5 text-amber-800" />
+          <AlertTitle className="text-amber-800 font-medium">API Key Not Configured</AlertTitle>
+          <AlertDescription className="text-amber-700">
+            The Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.
+          </AlertDescription>
+        </Alert>
+      )}
+      
+      {!loading && hasUsedToday && timeUntilNextRecipe !== null && (
+        <Alert className="mb-6 bg-amber-50 border border-amber-200">
+          <AlertTitle className="text-amber-800 font-medium">Daily Limit Reached</AlertTitle>
+          <AlertDescription className="text-amber-700">
+            You've already used this feature today. Next recipe available in: {Math.floor(timeUntilNextRecipe / 60)} hours and {timeUntilNextRecipe % 60} minutes.
+          </AlertDescription>
+        </Alert>
+      )}
+      
+      {checkingUsage ? (
+        <div className="my-8 flex justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-gray-500">Checking your usage...</p>
+          </div>
+        </div>
+      ) : (
+        <RecipeForm 
+          onSubmit={handleGenerateRecipe} 
+          isLoading={isLoading} 
+          disabled={hasUsedToday || apiKeyMissing}
+        />
+      )}
+      
+      {isLoading && (
+        <div className="my-8 flex justify-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-gray-500">Crafting your recipe with AI...</p>
+          </div>
+        </div>
+      )}
+      
+      {recipe && !isLoading && <RecipeResult recipe={recipe} />}
+    </div>
   );
 }
