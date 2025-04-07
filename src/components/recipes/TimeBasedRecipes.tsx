@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Clock, AlertCircle, ChevronUp, ChevronDown, ShoppingCart } from 'lucide-react';
 import { useAgeFilter } from '@/contexts/AgeFilterContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Ingredient {
   name: string;
@@ -229,48 +230,42 @@ export function TimeBasedRecipes() {
   const [timeUntilNext, setTimeUntilNext] = useState<string>('');
   const [expandedRecipes, setExpandedRecipes] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
       setCurrentTime(now);
 
-      // Find the next meal time
       const currentHour = now.getHours();
       const currentMinutes = now.getMinutes();
       const currentTimeInMinutes = currentHour * 60 + currentMinutes;
 
-      // Define meal times in minutes for easier comparison
       const mealTimes = [
-        { time: 9 * 60, meal: mealSchedule[0] },  // Breakfast at 9:00
-        { time: 13 * 60, meal: mealSchedule[1] }, // Lunch at 13:00
-        { time: 16 * 60, meal: mealSchedule[2] }, // Snacks at 16:00
-        { time: 20 * 60, meal: mealSchedule[3] }  // Dinner at 20:00
+        { time: 9 * 60, meal: mealSchedule[0] },
+        { time: 13 * 60, meal: mealSchedule[1] },
+        { time: 16 * 60, meal: mealSchedule[2] },
+        { time: 20 * 60, meal: mealSchedule[3] }
       ];
 
-      // Find the next meal
       let nextMealTime;
       if (currentTimeInMinutes < mealTimes[0].time) {
-        // Before first meal of the day
         nextMealTime = mealTimes[0].meal;
       } else if (currentTimeInMinutes >= mealTimes[mealTimes.length - 1].time) {
-        // After last meal of the day, show next day's breakfast
         nextMealTime = mealTimes[0].meal;
       } else {
-        // Find the next meal time
         const nextMeal = mealTimes.find(mt => mt.time > currentTimeInMinutes);
         nextMealTime = nextMeal ? nextMeal.meal : mealTimes[0].meal;
       }
 
       setNextMeal(nextMealTime);
 
-      // Calculate time until next meal
       const [nextHours, nextMinutes] = nextMealTime.time.split(':').map(Number);
       const nextTimeInMinutes = nextHours * 60 + nextMinutes;
       let minutesUntilNext = nextTimeInMinutes - currentTimeInMinutes;
       
       if (minutesUntilNext < 0) {
-        minutesUntilNext += 24 * 60; // Add 24 hours if next meal is tomorrow
+        minutesUntilNext += 24 * 60;
       }
 
       const hoursUntilNext = Math.floor(minutesUntilNext / 60);
@@ -280,7 +275,7 @@ export function TimeBasedRecipes() {
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 60000); // Update every minute
+    const interval = setInterval(updateTime, 60000);
 
     return () => clearInterval(interval);
   }, []);
@@ -296,7 +291,6 @@ export function TimeBasedRecipes() {
   };
 
   const handleAddToCart = (recipe: Recipe) => {
-    // Add the recipe ingredients to cart
     toast({
       title: "Added to Cart",
       description: `${recipe.name} ingredients have been added to your cart.`,
@@ -320,30 +314,30 @@ export function TimeBasedRecipes() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Clock className="h-6 w-6 text-primary" />
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <Clock className="h-5 w-5 md:h-6 md:w-6 text-primary" />
           Coming up next
         </h2>
-        <div className="flex items-center gap-2">
-          <div className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="text-sm font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
             {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
-          <div className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
+          <div className="text-xs md:text-sm text-gray-600 bg-gray-100 px-2 md:px-3 py-1 rounded-full flex items-center gap-1 md:gap-2">
+            <AlertCircle className="h-3 w-3 md:h-4 md:w-4" />
             {timeUntilNext}
           </div>
         </div>
       </div>
 
-      <Card className="p-6 bg-gradient-to-br from-primary/5 to-primary/10">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="text-4xl">{nextMeal.icon}</div>
+      <Card className="p-4 md:p-6 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="flex items-center gap-3 md:gap-4 mb-4">
+          <div className="text-3xl md:text-4xl">{nextMeal.icon}</div>
           <div>
-            <h3 className="text-xl font-semibold text-gray-900">{nextMeal.title}</h3>
-            <p className="text-sm text-gray-600">{nextMeal.prompt}</p>
-            <p className="text-sm font-medium text-primary mt-1">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900">{nextMeal.title}</h3>
+            <p className="text-xs md:text-sm text-gray-600">{nextMeal.prompt}</p>
+            <p className="text-xs md:text-sm font-medium text-primary mt-1">
               Suggested for {nextMeal.time}
             </p>
           </div>
@@ -353,25 +347,25 @@ export function TimeBasedRecipes() {
           variants={container}
           initial="hidden"
           animate="show"
-          className="grid gap-4"
+          className="grid gap-3 md:gap-4"
         >
           {selectedAgeGroup ? (
             nextMeal.recipes[selectedAgeGroup as keyof typeof nextMeal.recipes].map((recipe) => (
               <motion.div key={recipe.name} variants={item}>
                 <Card className="overflow-hidden">
-                  <div className="p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="font-medium">{recipe.name}</span>
+                  <div className="p-3 md:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+                      <span className="font-medium text-sm md:text-base">{recipe.name}</span>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleRecipe(recipe.name)}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                       >
                         {expandedRecipes.has(recipe.name) ? (
-                          <>Hide Ingredients <ChevronUp className="h-4 w-4" /></>
+                          <>Hide Ingredients <ChevronUp className="h-3 w-3 md:h-4 md:w-4" /></>
                         ) : (
-                          <>Show Ingredients <ChevronDown className="h-4 w-4" /></>
+                          <>Show Ingredients <ChevronDown className="h-3 w-3 md:h-4 md:w-4" /></>
                         )}
                       </Button>
                     </div>
@@ -382,24 +376,24 @@ export function TimeBasedRecipes() {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="mt-4"
+                        className="mt-3 md:mt-4"
                       >
-                        <h4 className="font-medium text-sm mb-2">Ingredients:</h4>
+                        <h4 className="font-medium text-xs md:text-sm mb-2">Ingredients:</h4>
                         <ul className="space-y-1">
                           {recipe.ingredients.map((ingredient, idx) => (
-                            <li key={idx} className="text-sm text-gray-600">
+                            <li key={idx} className="text-xs md:text-sm text-gray-600">
                               {ingredient.name} ({ingredient.amount} {ingredient.unit})
                             </li>
                           ))}
                         </ul>
-                        <div className="mt-4 flex justify-end">
+                        <div className="mt-3 md:mt-4 flex justify-end">
                           <Button 
                             variant="default" 
                             size="sm"
                             onClick={() => handleAddToCart(recipe)}
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-1 md:gap-2 text-xs md:text-sm"
                           >
-                            <ShoppingCart className="h-4 w-4" />
+                            <ShoppingCart className="h-3 w-3 md:h-4 md:w-4" />
                             Add to Cart
                           </Button>
                         </div>

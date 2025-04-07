@@ -35,7 +35,6 @@ const BlogPostPage = () => {
   }
 
   return (
-    <Layout>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Link to="/blog">
           <Button variant="ghost" className="mb-4">
@@ -73,7 +72,6 @@ const BlogPostPage = () => {
           />
         </article>
       </div>
-    </Layout>
   );
 };
 

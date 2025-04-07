@@ -60,27 +60,57 @@ export type Database = {
           cuisine: string | null
           description: string | null
           id: string
-          image_url: string | null
           name: string
-          recipe: string | null
+          recipeUrl: string | null
+          youtubeVideoId: string | null
         }
         Insert: {
           created_at?: string
           cuisine?: string | null
           description?: string | null
           id?: string
-          image_url?: string | null
           name: string
-          recipe?: string | null
+          recipeUrl?: string | null
+          youtubeVideoId?: string | null
         }
         Update: {
           created_at?: string
           cuisine?: string | null
           description?: string | null
           id?: string
-          image_url?: string | null
           name?: string
-          recipe?: string | null
+          recipeUrl?: string | null
+          youtubeVideoId?: string | null
+        }
+        Relationships: []
+      }
+      feedback: {
+        Row: {
+          admin_response: string | null
+          created_at: string
+          email: string
+          id: string
+          is_read: boolean
+          message: string
+          status: string
+        }
+        Insert: {
+          admin_response?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          is_read?: boolean
+          message: string
+          status?: string
+        }
+        Update: {
+          admin_response?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          status?: string
         }
         Relationships: []
       }

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from '@/components/ui/card';
@@ -14,6 +15,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 
+// Define the Feedback interface which matches the database table structure
 interface Feedback {
   id: string;
   email: string;
@@ -35,10 +37,14 @@ export default function FeedbackDashboard() {
 
   const fetchFeedback = async () => {
     try {
+      // Use type assertion to work around TypeScript limitations with the feedback table
       const { data, error } = await supabase
         .from('feedback')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as { 
+          data: Feedback[] | null; 
+          error: any;
+        };
 
       if (error) throw error;
       setFeedbacks(data || []);
@@ -56,10 +62,13 @@ export default function FeedbackDashboard() {
 
   const updateFeedbackStatus = async (id: string, status: 'pending' | 'reviewed' | 'resolved') => {
     try {
+      // Use type assertion here as well
       const { error } = await supabase
         .from('feedback')
         .update({ status })
-        .eq('id', id);
+        .eq('id', id) as {
+          error: any;
+        };
 
       if (error) throw error;
 
@@ -83,10 +92,13 @@ export default function FeedbackDashboard() {
 
   const markAsRead = async (id: string) => {
     try {
+      // Use type assertion here as well
       const { error } = await supabase
         .from('feedback')
         .update({ is_read: true })
-        .eq('id', id);
+        .eq('id', id) as {
+          error: any;
+        };
 
       if (error) throw error;
 

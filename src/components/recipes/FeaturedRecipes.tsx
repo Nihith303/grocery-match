@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Clock, Users, ChefHat, Star, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Recipe {
   id: string;
@@ -74,6 +76,7 @@ interface FeaturedRecipesProps {
 }
 
 export function FeaturedRecipes({ selectedAgeGroup }: FeaturedRecipesProps) {
+  const isMobile = useIsMobile();
   const filteredRecipes = selectedAgeGroup
     ? demoRecipes.filter(recipe => 
         recipe.ageGroups.some(group => 
@@ -102,7 +105,7 @@ export function FeaturedRecipes({ selectedAgeGroup }: FeaturedRecipesProps) {
       variants={container}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
     >
       {filteredRecipes.map((recipe) => (
         <motion.div key={recipe.id} variants={item}>
@@ -119,13 +122,13 @@ export function FeaturedRecipes({ selectedAgeGroup }: FeaturedRecipesProps) {
               </div>
             </div>
 
-            <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+            <div className="p-3 md:p-4">
+              <h3 className="text-base md:text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                 {recipe.title}
               </h3>
-              <p className="text-sm text-gray-600 mb-4">{recipe.description}</p>
+              <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">{recipe.description}</p>
 
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
                 {recipe.tags.map((tag) => (
                   <span
                     key={tag}
@@ -136,23 +139,23 @@ export function FeaturedRecipes({ selectedAgeGroup }: FeaturedRecipesProps) {
                 ))}
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+              <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
                 <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
+                  <Clock className="h-3 w-3 md:h-4 md:w-4" />
                   {recipe.cookingTime}
                 </div>
                 <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
+                  <Users className="h-3 w-3 md:h-4 md:w-4" />
                   {recipe.servings} serv
                 </div>
                 <div className="flex items-center gap-1">
-                  <ChefHat className="h-4 w-4" />
+                  <ChefHat className="h-3 w-3 md:h-4 md:w-4" />
                   {recipe.difficulty}
                 </div>
               </div>
 
-              <Button className="w-full group-hover:bg-primary/90 transition-colors">
-                <Plus className="h-4 w-4 mr-2" />
+              <Button className="w-full text-sm group-hover:bg-primary/90 transition-colors">
+                <Plus className="h-3 w-3 md:h-4 md:w-4 mr-2" />
                 Add to Cart
               </Button>
             </div>

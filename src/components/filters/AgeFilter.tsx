@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { Apple, GraduationCap, Users, Heart, ChevronDown, X } from 'lucide-react';
 import { useAgeFilter } from '@/contexts/AgeFilterContext';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AgeGroup {
   id: string;
@@ -122,6 +124,7 @@ const ageGroups: AgeGroup[] = [
 
 export const AgeFilter = () => {
   const { selectedAgeGroup, setSelectedAgeGroup } = useAgeFilter();
+  const isMobile = useIsMobile();
 
   const clearFilter = () => {
     setSelectedAgeGroup(null);
@@ -146,12 +149,13 @@ export const AgeFilter = () => {
         )}
       </div>
       
-      <div className="flex gap-4 mb-8">
+      {/* Mobile and desktop responsive grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
         {ageGroups.map((group) => (
           <button
             key={group.id}
             onClick={() => setSelectedAgeGroup(group.id)}
-            className={`flex-1 p-4 rounded-lg flex items-center gap-3 transition-all relative group ${
+            className={`p-3 md:p-4 rounded-lg flex flex-col md:flex-row items-center md:items-center gap-2 transition-all relative group ${
               selectedAgeGroup === group.id
                 ? 'ring-2 ring-green-500 bg-green-50'
                 : 'bg-white hover:bg-gray-50'
@@ -165,11 +169,11 @@ export const AgeFilter = () => {
             }`}>
               {group.icon}
             </div>
-            <div className="text-left">
-              <div className="font-semibold text-gray-900">{group.title}</div>
-              <div className="text-sm text-gray-500">{group.range}</div>
+            <div className="text-center md:text-left">
+              <div className="font-semibold text-sm md:text-base text-gray-900">{group.title}</div>
+              <div className="text-xs md:text-sm text-gray-500">{group.range}</div>
             </div>
-            <ChevronDown className={`w-4 h-4 ml-auto transition-transform ${
+            <ChevronDown className={`hidden md:block w-4 h-4 ml-auto transition-transform ${
               selectedAgeGroup === group.id ? 'rotate-180' : ''
             }`} />
           </button>
@@ -177,17 +181,17 @@ export const AgeFilter = () => {
       </div>
 
       {selectedAgeGroup && (
-        <div className="bg-white p-6 rounded-lg shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm">
           {ageGroups.map((group) => group.id === selectedAgeGroup && (
-            <div key={group.id} className="space-y-6">
+            <div key={group.id} className="space-y-4 md:space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-green-700 mb-2 flex items-center gap-2">
                   <Apple className="w-5 h-5" />
                   Nutritional Focus
                 </h3>
-                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-2 gap-2">
+                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-1 md:grid-cols-2 gap-2">
                   {group.nutritionalFocus.map((item, index) => (
-                    <li key={index}>{item}</li>
+                    <li key={index} className="text-sm md:text-base">{item}</li>
                   ))}
                 </ul>
               </div>
@@ -197,9 +201,9 @@ export const AgeFilter = () => {
                   <Users className="w-5 h-5" />
                   Recipe Suggestions
                 </h3>
-                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-2 gap-2">
+                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-1 md:grid-cols-2 gap-2">
                   {group.recipeSuggestions.map((item, index) => (
-                    <li key={index}>{item}</li>
+                    <li key={index} className="text-sm md:text-base">{item}</li>
                   ))}
                 </ul>
               </div>
@@ -209,9 +213,9 @@ export const AgeFilter = () => {
                   <Heart className="w-5 h-5" />
                   Health Benefits
                 </h3>
-                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-2 gap-2">
+                <ul className="list-disc pl-5 text-gray-600 grid grid-cols-1 md:grid-cols-2 gap-2">
                   {group.healthBenefits.map((item, index) => (
-                    <li key={index}>{item}</li>
+                    <li key={index} className="text-sm md:text-base">{item}</li>
                   ))}
                 </ul>
               </div>
