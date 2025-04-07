@@ -223,6 +223,7 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
                 checked={dietaryPreferences.includes("vegetarian")}
                 onCheckedChange={() => toggleDietaryPreference("vegetarian")}
                 disabled={isFormDisabled}
+                className="w-8"
               />
               <label 
                 htmlFor="vegetarian" 
@@ -238,6 +239,7 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
                 checked={dietaryPreferences.includes("vegan")}
                 onCheckedChange={() => toggleDietaryPreference("vegan")}
                 disabled={isFormDisabled}
+                className="w-8"
               />
               <label 
                 htmlFor="vegan" 
@@ -253,6 +255,7 @@ export function RecipeForm({ onSubmit, isLoading, disabled = false }: RecipeForm
                 checked={dietaryPreferences.includes("gluten-free")}
                 onCheckedChange={() => toggleDietaryPreference("gluten-free")}
                 disabled={isFormDisabled}
+                className="w-8"
               />
               <label 
                 htmlFor="gluten-free" 
